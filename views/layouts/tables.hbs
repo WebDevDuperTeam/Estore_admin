@@ -25,6 +25,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
+                                {{#each products}}
                                 <tr>
                                     <td>
                                         <div class="d-flex px-2 py-1">
@@ -32,20 +33,20 @@
                                                 <img src="/images/product-1.jpg" class="avatar avatar-sm me-3 border-radius-lg" alt="product1">
                                             </div>
                                             <div class="d-flex flex-column justify-content-center">
-                                                <h6 class="mb-0 text-sm">Harry Potter và bảo bối tử thần</h6>
-                                                <p class="text-xs text-secondary mb-0">J.K Rowling</p>
+                                                <h6 class="mb-0 text-sm">{{QUANAO_ID}}</h6>
+                                                <p class="text-xs text-secondary mb-0">{{LOAI_ID}}</p>
                                             </div>
                                         </div>
                                     </td>
                                     <td>
-                                        <p class="text-xs font-weight-bold mb-0">Fiction</p>
-                                        <p class="text-xs text-secondary mb-0">Fantasy</p>
+                                        <p class="text-xs font-weight-bold mb-0">{{COLOR}}</p>
+                                        <p class="text-xs text-secondary mb-0">{{SOLUONG}}</p>
                                     </td>
                                     <td class="align-middle text-center text-sm">
                                         <span class="badge badge-sm bg-gradient-success">In-stock</span>
                                     </td>
                                     <td class="align-middle text-center">
-                                        <span class="text-secondary text-xs font-weight-bold">350.000đ</span>
+                                        <span class="text-secondary text-xs font-weight-bold">{{GIA}}</span>
                                     </td>
                                     <td class="align-middle">
                                         <span data-bs-toggle="modal" data-bs-target="#editModal">
@@ -77,147 +78,7 @@
                                         </div>
                                     </div>
                                 </div>
-
-                                <tr>
-                                    <td>
-                                        <div class="d-flex px-2 py-1">
-                                            <div>
-                                                <img src="/images/product-2.jpg" class="avatar avatar-sm me-3 border-radius-lg" alt="book2">
-                                            </div>
-                                            <div class="d-flex flex-column justify-content-center">
-                                                <h6 class="mb-0 text-sm">Mật mã Da Vinci</h6>
-                                                <p class="text-xs text-secondary mb-0">Dan Brown</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <p class="text-xs font-weight-bold mb-0">Fiction</p>
-                                        <p class="text-xs text-secondary mb-0">Thriller</p>
-                                    </td>
-                                    <td class="align-middle text-center text-sm">
-                                        <span class="badge badge-sm bg-gradient-secondary">Out of stock</span>
-                                    </td>
-                                    <td class="align-middle text-center">
-                                        <span class="text-secondary text-xs font-weight-bold">400.000đ</span>
-                                    </td>
-                                    <td class="align-middle">
-                                        <a href="javascript:;" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
-                                            Edit
-                                        </a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="d-flex px-2 py-1">
-                                            <div>
-                                                <img src="/images/product-3.jpg" class="avatar avatar-sm me-3 border-radius-lg" alt="book3">
-                                            </div>
-                                            <div class="d-flex flex-column justify-content-center">
-                                                <h6 class="mb-0 text-sm">Kafka bên bờ biển</h6>
-                                                <p class="text-xs text-secondary mb-0">Haruki Murakami</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <p class="text-xs font-weight-bold mb-0">Fiction</p>
-                                        <p class="text-xs text-secondary mb-0">Fantasy</p>
-                                    </td>
-                                    <td class="align-middle text-center text-sm">
-                                        <span class="badge badge-sm bg-gradient-success">In-stock</span>
-                                    </td>
-                                    <td class="align-middle text-center">
-                                        <span class="text-secondary text-xs font-weight-bold">200.000đ</span>
-                                    </td>
-                                    <td class="align-middle">
-                                        <a href="javascript:;" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
-                                            Edit
-                                        </a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="d-flex px-2 py-1">
-                                            <div>
-                                                <img src="/images/product-4.jpg" class="avatar avatar-sm me-3 border-radius-lg" alt="book4">
-                                            </div>
-                                            <div class="d-flex flex-column justify-content-center">
-                                                <h6 class="mb-0 text-sm">Số đỏ</h6>
-                                                <p class="text-xs text-secondary mb-0">Vũ Trọng Phụng</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <p class="text-xs font-weight-bold mb-0">Fiction</p>
-                                        <p class="text-xs text-secondary mb-0">Literary</p>
-                                    </td>
-                                    <td class="align-middle text-center text-sm">
-                                        <span class="badge badge-sm bg-gradient-success">In-stock</span>
-                                    </td>
-                                    <td class="align-middle text-center">
-                                        <span class="text-secondary text-xs font-weight-bold">420.000đ</span>
-                                    </td>
-                                    <td class="align-middle">
-                                        <a href="javascript:;" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
-                                            Edit
-                                        </a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="d-flex px-2 py-1">
-                                            <div>
-                                                <img src="/images/product-5.jpg" class="avatar avatar-sm me-3 border-radius-lg" alt="book5">
-                                            </div>
-                                            <div class="d-flex flex-column justify-content-center">
-                                                <h6 class="mb-0 text-sm">Rừng na uy</h6>
-                                                <p class="text-xs text-secondary mb-0">Haruki Murakami</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <p class="text-xs font-weight-bold mb-0">Fiction</p>
-                                        <p class="text-xs text-secondary mb-0">Romance</p>
-                                    </td>
-                                    <td class="align-middle text-center text-sm">
-                                        <span class="badge badge-sm bg-gradient-secondary">Out of stock</span>
-                                    </td>
-                                    <td class="align-middle text-center">
-                                        <span class="text-secondary text-xs font-weight-bold">320.000đ</span>
-                                    </td>
-                                    <td class="align-middle">
-                                        <a href="javascript:;" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
-                                            Edit
-                                        </a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="d-flex px-2 py-1">
-                                            <div>
-                                                <img src="/images/product-6.jpg" class="avatar avatar-sm me-3 border-radius-lg" alt="book6">
-                                            </div>
-                                            <div class="d-flex flex-column justify-content-center">
-                                                <h6 class="mb-0 text-sm">Chí Phèo</h6>
-                                                <p class="text-xs text-secondary mb-0">Nam Cao</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <p class="text-xs font-weight-bold mb-0">Fiction</p>
-                                        <p class="text-xs text-secondary mb-0">Literary</p>
-                                    </td>
-                                    <td class="align-middle text-center text-sm">
-                                        <span class="badge badge-sm bg-gradient-secondary">Out of stock</span>
-                                    </td>
-                                    <td class="align-middle text-center">
-                                        <span class="text-secondary text-xs font-weight-bold">130.000đ</span>
-                                    </td>
-                                    <td class="align-middle">
-                                        <a href="javascript:;" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
-                                            Edit
-                                        </a>
-                                    </td>
-                                </tr>
+                                {{/each}}
                                 </tbody>
                             </table>
                         </div>
