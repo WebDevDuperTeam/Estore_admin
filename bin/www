@@ -3,12 +3,13 @@
 /**
  * Module dependencies.
  */
+
+require('dotenv').config();
 const app = require('../app');
 const debug = require('debug')('clothesstoreweb-admin:server');
 const http = require('http');
-require('dotenv').config();
-
 const {sequelize} = require('../models/index');
+
 sequelize.authenticate()
     .then(() => {
       console.log('database connection established');
