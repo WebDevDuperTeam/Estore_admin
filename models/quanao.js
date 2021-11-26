@@ -14,9 +14,17 @@ module.exports = function(sequelize, DataTypes) {
         key: 'LOAI_ID'
       }
     },
-    COLOR: {
+    MAU: {
       type: DataTypes.STRING(100),
       allowNull: true
+    },
+    THUONGHIEU_ID: {
+      type: DataTypes.CHAR(10),
+      allowNull: true,
+      references: {
+        model: 'thuonghieu',
+        key: 'THUONGHIEU_ID'
+      }
     },
     GIA: {
       type: DataTypes.DOUBLE,
@@ -24,6 +32,14 @@ module.exports = function(sequelize, DataTypes) {
     },
     SOLUONG: {
       type: DataTypes.INTEGER,
+      allowNull: true
+    },
+    GIOITINH: {
+      type: DataTypes.STRING(100),
+      allowNull: true
+    },
+    isArchieve: {
+      type: DataTypes.BOOLEAN,
       allowNull: true
     }
   }, {
@@ -44,6 +60,13 @@ module.exports = function(sequelize, DataTypes) {
         using: "BTREE",
         fields: [
           { name: "LOAI_ID" },
+        ]
+      },
+      {
+        name: "FK_QUANAO_THUONGHIEU",
+        using: "BTREE",
+        fields: [
+          { name: "THUONGHIEU_ID" },
         ]
       },
     ]

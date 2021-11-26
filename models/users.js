@@ -26,7 +26,7 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.CHAR(20),
       allowNull: true
     },
-    QUYEN: {
+    isAdmin: {
       type: DataTypes.CHAR(10),
       allowNull: true
     }
