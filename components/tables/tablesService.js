@@ -9,8 +9,8 @@ exports.listProducts = () => {
     return quanao.findAll({
         attribute:['MAU', 'GIA', 'SOLUONG', 'GIOITINH',
             'kichthuocs.KICHTHUOC',
-            'LOAI.TEN', 'TENSANPHAM',
-            'THUONGHIEU.TEN', 'TENTHUONGHIEU'],
+            'LOAI.TEN',
+            'THUONGHIEU.TEN'],
         include: [{
             model: kichthuoc,
             as:"kichthuocs",
