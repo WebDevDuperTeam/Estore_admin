@@ -34,19 +34,19 @@
                                                 <img src="/images/product-1.jpg" class="avatar avatar-sm me-3 border-radius-lg" alt="product1">
                                             </div>
                                             <div class="d-flex flex-column justify-content-center">
-                                                <h6 class="mb-0 text-sm">{{TEN}} {{MAU}}</h6>
+                                                <h6 class="mb-0 text-sm">{{LOAI.TEN}} {{MAU}}</h6>
                                                 <p class="text-xs text-secondary mb-0">{{GIOITINH}}</p>
                                             </div>
                                         </div>
                                     </td>
                                     <td>
-                                        <p class="text-xs font-weight-bold mb-0">{{TEN}}</p>
+                                        <p class="text-xs font-weight-bold mb-0">{{{THUONGHIEU.TEN}}}</p>
                                     </td>
                                     <td class="align-middle text-center text-sm">
                                         {{#unless SOLUONG}}
-                                            <span class="badge badge-sm bg-gradient-success">In-stock</span>
+                                            <span class="badge badge-sm bg-gradient-success">Hết hàng</span>
                                         {{else}}
-                                            <span class="badge badge-sm bg-gradient-success">In-stock</span>
+                                            <span class="badge badge-sm bg-gradient-success">Còn hàng</span>
                                         {{/unless}}
                                     </td>
                                     <td class="align-middle text-center">
@@ -57,11 +57,10 @@
                                             <a href="javascript:;" class="text-secondary font-weight-bold text-xs"
                                               data-bs-toggle="tooltip" data-bs-placement="bottom"
                                               title="Edit this product" data-container="body" data-animation="true"
-                                              data-original-title="Edit">
-                                            Edit
-                                            </a>
+                                              data-original-title="Edit">Edit</a>
                                         </span>
                                     </td>
+                                <!--TODO: Thay đổi modal chỉnh sửa sản phẩm-->
                                 </tr>
                                 <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModal" aria-hidden="true">
                                     <div class="modal-dialog modal- modal-dialog-centered modal-" role="document">
