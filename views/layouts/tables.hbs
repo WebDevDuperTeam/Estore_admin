@@ -25,7 +25,6 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <!--TODO: vẫn chưa lấy được LOAI.TEN và THUONGHIEU.TEN -->
                                 {{#each products}}
                                 <tr>
                                     <td>
@@ -53,25 +52,47 @@
                                         <span class="text-secondary text-xs font-weight-bold">{{GIA}}</span>
                                     </td>
                                     <td class="align-middle">
-                                        <span data-bs-toggle="modal" data-bs-target="#editModal">
+                                        <span data-bs-toggle="modal" data-bs-target="#editModal{{QUANAO_ID}}">
                                             <a href="javascript:;" class="text-secondary font-weight-bold text-xs"
                                               data-bs-toggle="tooltip" data-bs-placement="bottom"
                                               title="Edit this product" data-container="body" data-animation="true"
                                               data-original-title="Edit">Edit</a>
                                         </span>
                                     </td>
-                                <!--TODO: Thay đổi modal chỉnh sửa sản phẩm-->
                                 </tr>
-                                <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModal" aria-hidden="true">
-                                    <div class="modal-dialog modal- modal-dialog-centered modal-" role="document">
+                                <!--TODO: chưa thể scroll modal với mousewheel-->
+                                <div class="modal fade" id="editModal{{QUANAO_ID}}" tabindex="-1" role="dialog" aria-labelledby="editModal" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered modal-" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <h5 class="modal-title font-weight-bold" id="modal-title-default">Edit product</h5>
                                                 <button type="button" style="background-color: black;" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
-                                                <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.</p>
-                                                <p>A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your mouth.</p>
+                                                <div class="input-group input-group-static mb-4">
+                                                    <label>Tên sản phẩm</label>
+                                                    <input type="text" class="form-control" value="{{LOAI.TEN}}">
+                                                </div>
+                                                <div class="input-group input-group-static mb-4">
+                                                    <label>Màu sắc</label>
+                                                    <input type="text" class="form-control" value="{{MAU}}">
+                                                </div>
+                                                <div class="input-group input-group-static mb-4">
+                                                    <label>Giới tính phù hợp</label>
+                                                    <input type="text" class="form-control" value="{{GIOITINH}}">
+                                                </div>
+                                                <div class="input-group input-group-static mb-4">
+                                                    <label>Thương hiệu</label>
+                                                    <input type="text" class="form-control" value="{{THUONGHIEU.TEN}}">
+                                                </div>
+                                                <div class="input-group input-group-static mb-4">
+                                                    <label>Số lượng</label>
+                                                    <input type="text" class="form-control" value="{{SOLUONG}}">
+                                                </div>
+                                                <div class="input-group input-group-static mb-4">
+                                                    <label>Đơn giá</label>
+                                                    <input type="text" class="form-control" value="{{GIA}}">
+                                                </div>
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn bg-gradient-success">Save changes</button>
@@ -87,6 +108,7 @@
                         </div>
                     </div>
                 </div>
+
                 <nav aria-label="Page navigation example">
                     <ul class="pagination justify-content-center">
                         <li class="page-item">

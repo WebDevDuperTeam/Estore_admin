@@ -7,25 +7,19 @@ const { Op } = require("sequelize");
 
 exports.listProducts = () => {
     return quanao.findAll({
-        attribute:['MAU', 'GIA', 'SOLUONG', 'GIOITINH',
-            'kichthuocs.KICHTHUOC',
-            'LOAI.TEN',
-            'THUONGHIEU.TEN'],
+        attribute:['MAU', 'GIA', 'SOLUONG', 'GIOITINH', 'kichthuocs.KICHTHUOC', 'LOAI.TEN', 'THUONGHIEU.TEN'],
         include: [{
             model: kichthuoc,
             as:"kichthuocs",
-            attribute:[],
             require: true
         },{
             model: loai,
             as: 'LOAI',
-            attribute:[],
             require: true
         },
         {
             model: thuonghieu,
             as: "THUONGHIEU",
-            attribute:[],
             require: true
         }],
         where: [{
