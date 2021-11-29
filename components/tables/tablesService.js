@@ -5,9 +5,15 @@ const thuonghieu = models.thuonghieu;
 const quanao = models.quanao;
 const { Op } = require("sequelize");
 
-exports.listProducts = () => {
+exports.countTotalProducts = () =>{
+    return quanao.count();
+};
+
+exports.listProducts = (itemPerPage =6, page = 0) => {
     return quanao.findAll({
-        attribute:['MAU', 'GIA', 'SOLUONG', 'GIOITINH', 'kichthuocs.KICHTHUOC', 'LOAI.TEN', 'THUONGHIEU.TEN'],
+        offset: page * itemPerPage,
+        limit: itemPerPage,
+        attribute:['MAU', 'GIA', 'SOLUONG', 'GIOITINH', 'kichthuocs.KICHTHUOC', 'LOAI.TENLOAI','THUONGHIEU.TENTHUONGHIEU'],
         include: [{
             model: kichthuoc,
             as:"kichthuocs",
@@ -23,7 +29,7 @@ exports.listProducts = () => {
             require: true
         }],
         where: [{
-            isArchieve:{[Op.is]: false}
+            DAXOA: {[Op.is]: false}
         }]
-    }).catch(() => {throw SQLError.SYNTAX_ERR});
+    }).catch((err) => {throw err});
 };

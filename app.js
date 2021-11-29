@@ -13,6 +13,38 @@ const signupRouter = require('./components/account/signupRouter');
 const hbs = require("hbs");
 const app = express();
 
+//register hbs helper
+hbs.registerHelper('isEquals', function(value1, value2) {return value1 === value2;});
+hbs.registerHelper("listPage", function (currentPage, totalPagesPossible) {
+  let result = "";
+
+  //calculate (maxPageShown) pages that need rendering
+  const maxPageShown = 3;
+  const numberOfPageGroups = Math.ceil(totalPagesPossible / maxPageShown);
+  let i = 1;
+  for(i = 1; i < numberOfPageGroups; i++){
+    if(currentPage < maxPageShown * i + 1){
+      break;
+    }
+  }
+
+  //render (maxPagesShown) pages
+  const startPage = maxPageShown * (i - 1) + 1;
+  for(let j = startPage; j < startPage + maxPageShown; j++){
+    if(j > totalPagesPossible){
+      break;
+    }
+
+    if(j === parseInt(currentPage)){
+      result = result + "<li class=\"page-item active\"><a class=\"page-link\" href=\"javascript:;\">" + j + "</a></li>";
+    }
+    else{
+      result = result + "<li class=\"page-item\"><a class=\"page-link\" href=\"javascript:;\">" + j + "</a></li>";
+    }
+  }
+  return result;
+});
+
 //local variables
 app.locals.activeSideBarClass = "active bg-gradient-primary";
 

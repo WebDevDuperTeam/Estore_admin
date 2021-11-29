@@ -1,26 +1,26 @@
-var DataTypes = require("sequelize").DataTypes;
-var _binhluan = require("./binhluan");
-var _ct_giohang = require("./ct_giohang");
-var _ct_hoadon = require("./ct_hoadon");
-var _giohang = require("./giohang");
-var _hoadon = require("./hoadon");
-var _kichthuoc = require("./kichthuoc");
-var _loai = require("./loai");
-var _quanao = require("./quanao");
-var _thuonghieu = require("./thuonghieu");
-var _users = require("./users");
+const DataTypes = require("sequelize").DataTypes;
+const _binhluan = require("./binhluan");
+const _ct_giohang = require("./ct_giohang");
+const _ct_hoadon = require("./ct_hoadon");
+const _giohang = require("./giohang");
+const _hoadon = require("./hoadon");
+const _kichthuoc = require("./kichthuoc");
+const _loai = require("./loai");
+const _quanao = require("./quanao");
+const _thuonghieu = require("./thuonghieu");
+const _users = require("./users");
 
 function initModels(sequelize) {
-  var binhluan = _binhluan(sequelize, DataTypes);
-  var ct_giohang = _ct_giohang(sequelize, DataTypes);
-  var ct_hoadon = _ct_hoadon(sequelize, DataTypes);
-  var giohang = _giohang(sequelize, DataTypes);
-  var hoadon = _hoadon(sequelize, DataTypes);
-  var kichthuoc = _kichthuoc(sequelize, DataTypes);
-  var loai = _loai(sequelize, DataTypes);
-  var quanao = _quanao(sequelize, DataTypes);
-  var thuonghieu = _thuonghieu(sequelize, DataTypes);
-  var users = _users(sequelize, DataTypes);
+  const binhluan = _binhluan(sequelize, DataTypes);
+  const ct_giohang = _ct_giohang(sequelize, DataTypes);
+  const ct_hoadon = _ct_hoadon(sequelize, DataTypes);
+  const giohang = _giohang(sequelize, DataTypes);
+  const hoadon = _hoadon(sequelize, DataTypes);
+  const kichthuoc = _kichthuoc(sequelize, DataTypes);
+  const loai = _loai(sequelize, DataTypes);
+  const quanao = _quanao(sequelize, DataTypes);
+  const thuonghieu = _thuonghieu(sequelize, DataTypes);
+  const users = _users(sequelize, DataTypes);
 
   giohang.belongsToMany(quanao, { as: 'QUANAO_ID_quanaos', through: ct_giohang, foreignKey: "GIOHANG_ID", otherKey: "QUANAO_ID" });
   hoadon.belongsToMany(quanao, { as: 'QUANAO_ID_quanao_ct_hoadons', through: ct_hoadon, foreignKey: "HOADON_ID", otherKey: "QUANAO_ID" });

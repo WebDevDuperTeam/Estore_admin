@@ -6,4 +6,4 @@ const sequelize = new  Sequelize(process.env.DB_DATABASE, process.env.DB_USERNAM
     dialect: 'mysql'
 });
 
-module.exports = {sequelize, models: initModels(sequelize),};
+module.exports = {sequelize, models: initModels(sequelize)};
