@@ -8,8 +8,8 @@ exports.showPage = async (req, res) => {
         if(isNaN(productPage) || productPage <= 0 || productPage == null){
             productPage = 1;
         }
-        products = await tablesService.listProducts(itemPerPage,productPage - 1);
 
+        products = await tablesService.listProducts(itemPerPage,productPage - 1);
         res.render('tables', {title: "Data tables", tablesActive: req.app.locals.activeSideBarClass, products, productPage, numberOfPossiblePages});
     }
     catch (err) {

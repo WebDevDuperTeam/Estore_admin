@@ -15,12 +15,11 @@ const app = express();
 
 //register hbs helper
 hbs.registerHelper('isEquals', function(value1, value2) {return value1 === value2;});
-hbs.registerHelper("listPage", function (currentPage, totalPagesPossible) {
+hbs.registerHelper("listPage", function (currentPage, maxNumberOfPages, formLink, options) {
   let result = "";
-
   //calculate (maxPageShown) pages that need rendering
   const maxPageShown = 3;
-  const numberOfPageGroups = Math.ceil(totalPagesPossible / maxPageShown);
+  const numberOfPageGroups = Math.ceil(maxNumberOfPages / maxPageShown);
   let i = 1;
   for(i = 1; i < numberOfPageGroups; i++){
     if(currentPage < maxPageShown * i + 1){
@@ -31,18 +30,32 @@ hbs.registerHelper("listPage", function (currentPage, totalPagesPossible) {
   //render (maxPagesShown) pages
   const startPage = maxPageShown * (i - 1) + 1;
   for(let j = startPage; j < startPage + maxPageShown; j++){
-    if(j > totalPagesPossible){
+    if(j > maxNumberOfPages){
       break;
     }
-
+    //build context (an object with attribute [isActive, productPageLink, pageNumber])
+    const context = {active:"", productPageLink: formLink + j, pageNumber: j};
     if(j === parseInt(currentPage)){
-      result = result + "<li class=\"page-item active\"><a class=\"page-link\" href=\"javascript:;\">" + j + "</a></li>";
+      context.active = "active";
     }
-    else{
-      result = result + "<li class=\"page-item\"><a class=\"page-link\" href=\"javascript:;\">" + j + "</a></li>";
-    }
+    result = result + options.fn(context);
   }
+
   return result;
+});
+hbs.registerHelper("previousPageNav", function (currentPage, formLink, options) {
+  const context = {pageLink: formLink + (currentPage - 1).toString()};
+  if(currentPage === (1).toString()){
+    context.pageLink = formLink + (1).toString();
+  }
+  return options.fn(context);
+});
+hbs.registerHelper("nextPageNav", function (currentPage, maxNumberOfPages, formLink, options) {
+  const context = {pageLink: formLink + (parseInt(currentPage) + 1).toString()};
+  if(parseInt(currentPage) === maxNumberOfPages){
+    context.pageLink = formLink + currentPage;
+  }
+  return options.fn(context);
 });
 
 //local variables
