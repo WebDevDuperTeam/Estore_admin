@@ -15,35 +15,92 @@ const app = express();
 
 //register hbs helper
 hbs.registerHelper('isEquals', function(value1, value2) {return value1 === value2;});
-hbs.registerHelper("listPage", function (currentPage, totalPagesPossible) {
+hbs.registerHelper("listPage", function (currentPage, maxNumberOfPages, formLink, originalUrl, options) {
   let result = "";
-
-  //calculate (maxPageShown) pages that need rendering
+  //calculate number of pages that need rendering
   const maxPageShown = 3;
-  const numberOfPageGroups = Math.ceil(totalPagesPossible / maxPageShown);
-  let i = 1;
+  const numberOfPageGroups = Math.ceil(maxNumberOfPages / maxPageShown);
+  let i;
   for(i = 1; i < numberOfPageGroups; i++){
     if(currentPage < maxPageShown * i + 1){
       break;
     }
   }
 
-  //render (maxPagesShown) pages
+  //render pages
   const startPage = maxPageShown * (i - 1) + 1;
+  const pageQueryAttr = formLink.substring(formLink.indexOf("?") + 1, formLink.indexOf("="));
   for(let j = startPage; j < startPage + maxPageShown; j++){
-    if(j > totalPagesPossible){
+    if(j > maxNumberOfPages){
       break;
     }
-
+    //build context (an object with attribute [isActive, productPageLink, pageNumber])
+    const context = {active:"", productPageLink: getPageLink(originalUrl, pageQueryAttr, j), pageNumber: j};
     if(j === parseInt(currentPage)){
-      result = result + "<li class=\"page-item active\"><a class=\"page-link\" href=\"javascript:;\">" + j + "</a></li>";
+      context.active = "active";
     }
-    else{
-      result = result + "<li class=\"page-item\"><a class=\"page-link\" href=\"javascript:;\">" + j + "</a></li>";
-    }
+
+    //add context to options
+    result = result + options.fn(context);
   }
   return result;
 });
+hbs.registerHelper("previousPageNav", function (currentPage, formLink, originalUrl, options) {
+  //calculate previous page
+  let prevPage;
+  if(parseInt(currentPage) === 1){
+    prevPage = 1;
+  }
+  else{
+    prevPage = currentPage - 1;
+  }
+
+  //build and add context to options
+  const pageQueryAttr = formLink.substring(formLink.indexOf("?") + 1, formLink.indexOf("="));
+  const context = {pageLink: getPageLink(originalUrl, pageQueryAttr, prevPage)};
+
+  return options.fn(context);
+});
+hbs.registerHelper("nextPageNav", function (currentPage, maxNumberOfPages, formLink, originalUrl, options) {
+  //calculate next page
+  let nextPage;
+  if(parseInt(currentPage) === maxNumberOfPages){
+    nextPage = maxNumberOfPages;
+  }
+  else{
+    nextPage = parseInt(currentPage) + 1;
+  }
+
+  //build and add context to options
+  const pageQueryAttr = formLink.substring(formLink.indexOf("?") + 1, formLink.indexOf("="));
+  const context = {pageLink: getPageLink(originalUrl, pageQueryAttr, nextPage)};
+  return options.fn(context);
+});
+function getPageLink(originalUrl, pageQueryAttr, value){
+  if(originalUrl.includes(pageQueryAttr)){
+    return updateQueryStringParameter(originalUrl, pageQueryAttr, value);
+  }
+  else{
+    if(originalUrl.includes("?")){
+      return originalUrl.concat("&" + pageQueryAttr + "=" + value);
+    }
+    else{
+      return originalUrl.concat("?" + pageQueryAttr + "=" + value);
+    }
+  }
+
+  return null;
+}
+function updateQueryStringParameter(uri, key, value) {
+  var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
+  var separator = uri.indexOf('?') !== -1 ? "&" : "?";
+  if (uri.match(re)) {
+    return uri.replace(re, '$1' + key + "=" + value + '$2');
+  }
+  else {
+    return uri + separator + key + "=" + value;
+  }
+}
 
 //local variables
 app.locals.activeSideBarClass = "active bg-gradient-primary";
