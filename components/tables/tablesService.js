@@ -9,11 +9,64 @@ exports.countTotalProducts = () =>{
     return quanao.count();
 };
 
+exports.countProductsOfName = (name) => {
+    return quanao.count({
+        include: [{
+            model: kichthuoc,
+            as:"kichthuocs",
+            require: true
+        },{
+            model: loai,
+            as: 'LOAI',
+            require: true,
+            where: [{
+                TENLOAI: {[Op.substring]: name}
+            }]
+        },
+            {
+                model: thuonghieu,
+                as: "THUONGHIEU",
+                require: true
+            }],
+        where: [{
+            DAXOA: {[Op.is]: false},
+        }]
+    }).catch((err) => {throw err});
+};
+
+exports.listProductsOfName = (itemPerPage =6, page = 0, name) => {
+    return quanao.findAll({
+        offset: page * itemPerPage,
+        limit: itemPerPage,
+        attribute:['MAU', 'GIA', 'SOLUONG', 'GIOITINH'],
+        include: [{
+            model: kichthuoc,
+            as:"kichthuocs",
+            require: true
+        },{
+            model: loai,
+            as: 'LOAI',
+            require: true,
+            where: [{
+                TENLOAI: {[Op.substring]: name}
+            }]
+        },
+        {
+            model: thuonghieu,
+            as: "THUONGHIEU",
+            require: true
+        }],
+        where: [{
+            DAXOA: {[Op.is]: false},
+        }]
+    }).catch((err) => {throw err});
+};
+
 exports.listProducts = (itemPerPage =6, page = 0) => {
     return quanao.findAll({
         offset: page * itemPerPage,
         limit: itemPerPage,
-        attribute:['MAU', 'GIA', 'SOLUONG', 'GIOITINH', 'kichthuocs.KICHTHUOC', 'LOAI.TENLOAI','THUONGHIEU.TENTHUONGHIEU'],
+        attribute:['MAU', 'GIA', 'SOLUONG', 'GIOITINH'],
         include: [{
             model: kichthuoc,
             as:"kichthuocs",
@@ -22,8 +75,7 @@ exports.listProducts = (itemPerPage =6, page = 0) => {
             model: loai,
             as: 'LOAI',
             require: true
-        },
-        {
+        },{
             model: thuonghieu,
             as: "THUONGHIEU",
             require: true

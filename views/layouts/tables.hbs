@@ -8,11 +8,13 @@
             <div class="col-12">
                 <div class="d-flex justify-content-start mb-3">
                     <!--TODO: Thực hiện tìm kiếm khi người dùng nhấn tìm kiếm-->
-                    <div class="input-group input-group-static mb-4">
-                        <label class="h6">Tìm kiếm sản phẩm theo tên</label>
-                        <input type="text" class="form-control">
-                    </div>
-                    <div class="me-2"><a class="btn bg-gradient-success me-2">Tìm kiếm</a></div>
+                    <form action="" method="GET" class="d-flex justify-content-center">
+                        <div class="input-group input-group-static mb-3">
+                            <label class="h6">Tìm kiếm sản phẩm theo tên</label>
+                            <input type="text" class="form-control" name="productName">
+                        </div>
+                        <div class="me-2"><input type="submit" class="btn submit bg-gradient-success me-2" value="Tìm kiếm"></div>
+                    </form>
                     <div class="me-2">
                         <a class="btn bg-gradient-primary" data-bs-toggle="modal" data-bs-target="#addProductModal">Thêm sản phẩm</a>
                         <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="modal-form"
@@ -180,10 +182,10 @@
                         </div>
                     </div>
                 </div>
+                <!--Product page navigation-->
                 <nav aria-label="Product Page navigation">
                     <ul class="pagination justify-content-center">
-                        <!--TODO: cần kiểm thử phân trang với số lượng lớn sản phẩm-->
-                        {{#previousPageNav productPage "/tables?productPage="}}
+                        {{#previousPageNav productPage "/tables?productPage=" originalUrl}}
                             <li class="page-item">
                                 <a class="page-link" href="{{pageLink}}" tabindex="-1">
                                 <span class="material-icons">
@@ -193,21 +195,22 @@
                                 </a>
                             </li>
                         {{/previousPageNav}}
-                        {{#listPage productPage numberOfPossiblePages "/tables?productPage="}}
+                        {{#listPage productPage maxNumberOfPages "/tables?productPage=" originalUrl}}
                             <li class="page-item {{active}}"><a class="page-link" href="{{productPageLink}}">{{pageNumber}}</a></li>
                         {{/listPage}}
-                        {{#nextPageNav productPage numberOfPossiblePages "/tables?productPage="}}
-                        <li class="page-item">
-                            <a class="page-link" href="{{pageLink}}">
+                        {{#nextPageNav productPage maxNumberOfPages "/tables?productPage=" originalUrl}}
+                            <li class="page-item">
+                                <a class="page-link" href="{{pageLink}}">
                                 <span class="material-icons">
                                   keyboard_arrow_right
                                 </span>
-                                <span class="sr-only">Next</span>
-                            </a>
-                        </li>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </li>
                         {{/nextPageNav}}
                     </ul>
                 </nav>
+                <!--Product page navigation end-->
             </div>
         </div>
 
