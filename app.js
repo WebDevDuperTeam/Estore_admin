@@ -3,14 +3,17 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const serveIndex = require('serve-index');
 
 const billingRouter = require('./components/billing/billingRouter');
 const dashboardRouter = require('./components/dashboard/dashboardRouter');
 const profileRouter = require('./components/profile/profileRouter');
 const tablesRouter = require('./components/tables/tablesRouter');
-const signinRouter = require('./components/account/signinRouter');
-const signupRouter = require('./components/account/signupRouter');
+const authRouter = require('./components/auth/authRouter');
 const hbs = require("hbs");
+const session = require("express-session");
+const bodyParser = require("body-parser");
+const passport = require("./auth/passport");
 const app = express();
 
 //register hbs helper
@@ -107,7 +110,14 @@ app.locals.activeSideBarClass = "active bg-gradient-primary";
 
 // view engine setup
 hbs.registerPartials(path.join(__dirname, 'views/partials'));
-app.set('views', path.join(__dirname, 'views/layouts'));
+
+app.set('views', [__dirname + '/views/layouts'
+                  ,__dirname + '/components/'
+                  ,__dirname + '/components/auth/views'
+                  ,__dirname + '/components/billing'
+                  ,__dirname + '/components/dashboard'
+                  ,__dirname + '/components/profile'
+                  ,__dirname + '/components/tables']);
 app.set('view engine', 'hbs');
 
 app.use(logger('dev'));
@@ -115,16 +125,22 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(session({ secret: process.env.SESSION_SECRET}));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(function (req, res, next) {
+  res.locals.user = req.user;
+  next();
+})
 
-
+// set up router
 app.use('/', dashboardRouter);
 app.use('/billing', billingRouter);
 app.use('/dashboard', dashboardRouter);
 app.use('/profile', profileRouter);
 app.use('/tables', tablesRouter);
-app.use('/signin', signinRouter);
-app.use('/signup', signupRouter);
-
+app.use('/', authRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -139,7 +155,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  res.render('error', {layout: 'blankLayout'});
 });
 
 module.exports = app;

@@ -8,7 +8,7 @@
             <div class="col-12">
                 <div class="d-flex justify-content-start mb-3">
                     <!--TODO: Thực hiện tìm kiếm khi người dùng nhấn tìm kiếm-->
-                    <form action="" method="GET" class="d-flex justify-content-center">
+                    <form action="" method="GET" class="d-flex justify-content-center" onsubmit="disableEmptyInputs(this)">
                         <div class="input-group input-group-static mb-3">
                             <label class="h6">Tìm kiếm sản phẩm theo tên</label>
                             <input type="text" class="form-control" name="productName">
@@ -565,3 +565,4 @@
 <script async defer src="https://buttons.github.io/buttons.js"></script>
 <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
 <script src="/javascripts/material-dashboard.min.js?v=3.0.0"></script>
+<script src="/javascripts/util.js"></script>
