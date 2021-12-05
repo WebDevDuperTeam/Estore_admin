@@ -1,4 +1,4 @@
 exports.showPage = (req, res) => {
 
-    res.render('profile', {title: 'profile', profileActive: req.app.locals.activeSideBarClass});
+    res.render('profile', {title: 'Profile', profileActive: req.app.locals.activeSideBarClass});
 }

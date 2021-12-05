@@ -1,3 +1,8 @@
+exports.logout = (req, res) => {
+    req.logout();
+    res.redirect('/');
+}
+
 const passport = require('../../auth/passport');
 
 exports.signUserIn = (req, res) => {
