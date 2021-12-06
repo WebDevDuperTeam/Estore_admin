@@ -3,7 +3,6 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-const serveIndex = require('serve-index');
 
 const billingRouter = require('./components/billing/billingRouter');
 const dashboardRouter = require('./components/dashboard/dashboardRouter');

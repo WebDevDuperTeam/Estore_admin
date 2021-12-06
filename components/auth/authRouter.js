@@ -8,5 +8,6 @@ router.get('/signup', authController.showSignUpPage);
 router.get('/logout', authController.logout);
 
 router.post('/signin', passport.authenticate('local', { successRedirect: '/', failureRedirect: '/signin?signInFail'}));
+router.post('/signup', authController.signUpNewUser);
 
 module.exports = router;
