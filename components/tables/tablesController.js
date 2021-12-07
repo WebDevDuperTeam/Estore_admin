@@ -25,7 +25,17 @@ exports.showPage = async (req, res) => {
 
         //pass data to view and render
         const paginateInfo = {productPage, maxNumberOfPages, originalUrl, formLink: '/tables?productPage='};
-        res.render('tables', {title: "Data tables", products, tablesActive: req.app.locals.activeSideBarClass, paginateInfo});
+
+        // data admin to view and render
+        const admins =await tablesService.listAdmins();
+
+        res.render('tables', {title: "Data tables", products, tablesActive: req.app.locals.activeSideBarClass, paginateInfo, admins});
+
+
+        //admins list
+
+
+
     }
     catch (err) {
         res.render('error', {err});
