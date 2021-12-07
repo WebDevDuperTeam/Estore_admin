@@ -2,17 +2,13 @@
     <!-- Navbar -->
     {{> navBar breadcrumb='Profile'}}
     <!-- End Navbar -->
-    {{#if user}}
-        <div class="container-fluid px-2 px-md-4">
-            Please login to your account
-        </div>
-    {{else}}
-        <div class="container-fluid px-2 px-md-4">
+    <div class="container-fluid px-2 px-md-4">
         <div class="page-header min-height-300 border-radius-xl mt-4" style="background-image: url('https://images.unsplash.com/photo-1531512073830-ba890ca4eba2?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');">
             <span class="mask  bg-gradient-primary  opacity-6"></span>
         </div>
         <div class="card card-body mx-3 mx-md-4 mt-n6">
-            <div class="row gx-4 mb-2">
+            {{#if user}}
+                <div class="row gx-4 mb-2">
                 <div class="col-auto">
                     <div class="avatar avatar-xl position-relative">
                         <img src="/images/bruce-mars.jpg" alt="profile_image" class="w-100 border-radius-lg shadow-sm">
@@ -32,8 +28,7 @@
 
                 </div>
             </div>
-
-            <div class="row">
+                <div class="row">
                 <div class="row">
                     <div class="col-12 col-xl-4">
                         <div class="card card-plain h-100" style="width:100%">
@@ -237,9 +232,11 @@
                     </div>
                 </div>
             </div>
+            {{else}}
+                <h5>Please sign to your account to see profile</h5>
+            {{/if}}
         </div>
     </div>
-    {{/if}}
     <footer class="footer py-4  ">
         <div class="container-fluid">
             <div class="row align-items-center justify-content-lg-between">
