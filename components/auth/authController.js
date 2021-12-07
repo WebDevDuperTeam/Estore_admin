@@ -14,7 +14,6 @@ exports.showSignUpPage = (req, res) => {
     res.render('signup', { title: 'Sign Up', layout: "signLayout" });
 }
 
-//TODO: cần được kiểm thử chức năng đăng kí
 exports.signUpNewUser = async (req, res) => {
     const {firstName, lastName, email, password} = req.body;
     if(!email || !password || !firstName || !lastName){

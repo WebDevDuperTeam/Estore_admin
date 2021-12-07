@@ -6,11 +6,11 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       primaryKey: true
     },
-    FIRSTNAME: {
+    TEN: {
       type: DataTypes.STRING(10),
       allowNull: true
     },
-    FAMILYNAME: {
+    HO: {
       type: DataTypes.STRING(10),
       allowNull: true
     },
@@ -18,15 +18,15 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.CHAR(20),
       allowNull: true
     },
-    BANKING_CARDNUMBER: {
+    SO_BANKING: {
       type: DataTypes.CHAR(20),
       allowNull: true
     },
     PASS: {
-      type: DataTypes.CHAR(20),
+      type: DataTypes.CHAR(255),
       allowNull: true
     },
-    isAdmin: {
+    LaAdmin: {
       type: DataTypes.CHAR(10),
       allowNull: true
     }

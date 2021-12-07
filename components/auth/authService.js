@@ -4,10 +4,24 @@ const users = models.users;
 const salt = 10;
 
 exports.registerUser = async (firstName, lastName, email, password) => {
-    const checkUser = await users.findOne({where: {EMAIL: email}});
-    if(checkUser){
-        throw new Error("Email already registered");
+    //check if email is registered
+    const Account = await models.users.findOne({where: {EMAIL: email, LaAdmin: 'ADMIN'}});
+    if(Account) {
+        throw new Error('Email is already registered');
     }
-    const hashPassword = await bcrypt.hash(password, salt);
-    return await users.create({FIRSTNAME: firstName, LASTNAME: lastName, EMAIL: email, PASS: hashPassword});
+    const hashPass = await bcrypt.hash(password, salt);
+
+    const countRows = await models.users.count() + 1;
+    let NewID = "US";
+    if(countRows > 99) {
+        NewID = NewID + countRows.toString();
+    }
+    else if (countRows > 9){
+        NewID = NewID + "0" + countRows.toString();
+    }
+    else {
+        NewID = NewID + "00" + countRows.toString();
+    }
+    //create new account
+    return await users.create({USER_ID: NewID, TEN: firstName, HO: lastName, EMAIL: email, SO_BANKING: 0, PASS: hashPass, LaAdmin: 'ADMIN'});
 }

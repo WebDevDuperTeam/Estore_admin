@@ -24,8 +24,8 @@ exports.showPage = async (req, res) => {
         }
 
         //pass data to view and render
-        const paginateInfo = {products, productPage, maxNumberOfPages, originalUrl, formLink: '/tables?productPage='};
-        res.render('tables', {title: "Data tables", tablesActive: req.app.locals.activeSideBarClass, paginateInfo});
+        const paginateInfo = {productPage, maxNumberOfPages, originalUrl, formLink: '/tables?productPage='};
+        res.render('tables', {title: "Data tables", products, tablesActive: req.app.locals.activeSideBarClass, paginateInfo});
     }
     catch (err) {
         res.render('error', {err});

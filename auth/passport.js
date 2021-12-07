@@ -8,7 +8,7 @@ const bcrypt = require("bcrypt");
 passport.use(new LocalStrategy({usernameField: 'email', passwordField: 'password'},
     async function(username, password, done) {
         try {
-            const user = await users.findOne({raw:true, where: {EMAIL: username}});
+            const user = await users.findOne({raw:true, where: {EMAIL: username, LaAdmin: 'ADMIN'}});
             if (!user) {
                 return done(null, false, { message: 'Incorrect username.' });
             }
@@ -43,6 +43,5 @@ passport.deserializeUser(async function(id, done) {
         return done(err);
     }
 });
-
 
 module.exports = passport;
