@@ -3,7 +3,7 @@ const loai = models.loai;
 const kichthuoc = models.kichthuoc;
 const thuonghieu = models.thuonghieu;
 const quanao = models.quanao;
-const users=models.users;
+const users = models.users;
 const { Op } = require("sequelize");
 
 exports.countTotalProducts = () =>{
