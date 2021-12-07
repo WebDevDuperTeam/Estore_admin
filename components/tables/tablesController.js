@@ -30,12 +30,6 @@ exports.showPage = async (req, res) => {
         const admins =await tablesService.listAdmins();
 
         res.render('tables', {title: "Data tables", products, tablesActive: req.app.locals.activeSideBarClass, paginateInfo, admins});
-
-
-        //admins list
-
-
-
     }
     catch (err) {
         res.render('error', {err});
