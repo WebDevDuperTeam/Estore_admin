@@ -2,15 +2,19 @@ const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy;
 const {models} = require("../models");
 const users = models.users;
+const bcrypt = require("bcrypt");
+
 
 passport.use(new LocalStrategy({usernameField: 'email', passwordField: 'password'},
     async function(username, password, done) {
         try {
-            const user = await users.findOne({raw:true, where: {EMAIL: username}});
+            const user = await users.findOne({raw:true, where: {EMAIL: username, LaAdmin: 'ADMIN'}});
             if (!user) {
                 return done(null, false, { message: 'Incorrect username.' });
             }
-            if (!validPassword(user, password)) {
+
+            const valid = await validPassword(user, password);
+            if (!valid) {
                 return done(null, false, { message: 'Incorrect password.' });
             }
 
@@ -22,8 +26,8 @@ passport.use(new LocalStrategy({usernameField: 'email', passwordField: 'password
     })
 );
 
-function validPassword(user, password){
-    return user.PASS === password;
+async function validPassword(user, password) {
+    return await bcrypt.compare(password, user.PASS);
 }
 
 passport.serializeUser(function(user, done) {
@@ -39,6 +43,5 @@ passport.deserializeUser(async function(id, done) {
         return done(err);
     }
 });
-
 
 module.exports = passport;

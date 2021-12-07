@@ -23,8 +23,9 @@ exports.showPage = async (req, res) => {
             products = await tablesService.listProducts(itemPerPage,productPage - 1);
         }
 
-        //pass data to view
-        res.render('tables', {title: "Data tables", tablesActive: req.app.locals.activeSideBarClass, products, productPage, maxNumberOfPages, originalUrl});
+        //pass data to view and render
+        const paginateInfo = {productPage, maxNumberOfPages, originalUrl, formLink: '/tables?productPage='};
+        res.render('tables', {title: "Data tables", products, tablesActive: req.app.locals.activeSideBarClass, paginateInfo});
     }
     catch (err) {
         res.render('error', {err});
