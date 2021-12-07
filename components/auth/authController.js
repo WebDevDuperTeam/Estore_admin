@@ -17,7 +17,7 @@ exports.showSignUpPage = (req, res) => {
 exports.signUpNewUser = async (req, res) => {
     const {firstName, lastName, email, password} = req.body;
     if(!email || !password || !firstName || !lastName){
-        res.render('signup', {missingInfo: true});
+        res.render('signup', {missingInfo: true, layout: 'signLayout'});
     }
     else{
         try{
@@ -28,7 +28,7 @@ exports.signUpNewUser = async (req, res) => {
             });
         }
         catch (err) {
-            res.render('signup', {alreadyRegistered: true});
+            res.render('signup', {alreadyRegistered: true, layout: 'signLayout'});
         }
     }
 }

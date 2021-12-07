@@ -5,7 +5,7 @@ const salt = 10;
 
 exports.registerUser = async (firstName, lastName, email, password) => {
     //check if email is registered
-    const Account = await models.users.findOne({where: {EMAIL: email, LaAdmin: 'ADMIN'}});
+    const Account = await users.findOne({where: {EMAIL: email, LaAdmin: 'ADMIN'}});
     if(Account) {
         throw new Error('Email is already registered');
     }
