@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const tablesController = require('./tablesController');
+const tablesController = require('./productsController');
 
 router.get('/', tablesController.showPage);
 
