@@ -7,7 +7,8 @@ const logger = require('morgan');
 const billingRouter = require('./components/billing/billingRouter');
 const dashboardRouter = require('./components/dashboard/dashboardRouter');
 const profileRouter = require('./components/profile/profileRouter');
-const tablesRouter = require('./components/tables/tablesRouter');
+const productsRouter = require('./components/products/productsRouter');
+const accountsRouter = require('./components/accounts/accountsRouter');
 const authRouter = require('./components/auth/authRouter');
 const hbs = require("hbs");
 const session = require("express-session");
@@ -116,7 +117,8 @@ app.set('views', [__dirname + '/views/layouts'
                   ,__dirname + '/components/billing'
                   ,__dirname + '/components/dashboard'
                   ,__dirname + '/components/profile'
-                  ,__dirname + '/components/tables']);
+                  ,__dirname + '/components/products'
+                  ,__dirname + '/components/accounts']);
 app.set('view engine', 'hbs');
 
 app.use(logger('dev'));
@@ -138,7 +140,8 @@ app.use('/', dashboardRouter);
 app.use('/billing', billingRouter);
 app.use('/dashboard', dashboardRouter);
 app.use('/profile', profileRouter);
-app.use('/tables', tablesRouter);
+app.use('/products', productsRouter);
+app.use('/accounts', accountsRouter);
 app.use('/', authRouter);
 
 // catch 404 and forward to error handler
