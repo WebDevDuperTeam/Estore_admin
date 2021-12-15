@@ -13,14 +13,14 @@ exports.countAdminsOfName = async (name) => {
         where: {
             LaAdmin: 'ADMIN',
             [Op.or]: [
-                {[Op.like]: {HO: name}},
-                {[Op.like]: {TEN: name}}
+                {HO: {[Op.substring]: name}},
+                {TEN: {[Op.substring]: name}}
             ]
         }
     }).catch((err) => {throw err});
 };
 
-exports.listAdminsOfName = async (itemPerPage =6, page=0) =>
+exports.listAdminsOfName = async (itemPerPage =6, page=0, name) =>
 {
     return await users.findAll({
         offset: page * itemPerPage,
@@ -30,8 +30,8 @@ exports.listAdminsOfName = async (itemPerPage =6, page=0) =>
         where: {
             LaAdmin: 'ADMIN',
             [Op.or]: [
-                {[Op.like]: {HO: name}},
-                {[Op.like]: {TEN: name}}
+                {HO: {[Op.substring]: name}},
+                {TEN: {[Op.substring]: name}}
             ]
         }
     }).catch((err)=>{throw err});
