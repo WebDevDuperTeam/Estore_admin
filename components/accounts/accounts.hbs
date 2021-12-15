@@ -1,6 +1,6 @@
 <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
     <!-- Navbar -->
-    {{>navBar breadcrumb='Tables'}}
+    {{>navBar breadcrumb='Accounts'}}
     <!-- End Navbar -->
 
     <div class="container-fluid py-4">
@@ -69,6 +69,9 @@
                         </div>
                     </div>
                 </div>
+                <!--Product page navigation-->
+                {{>pagination paginateInfo}}
+                <!--Product page navigation end-->
             </div>
         </div>
         {{> footer}}

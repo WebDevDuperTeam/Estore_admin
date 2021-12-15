@@ -8,7 +8,7 @@ exports.countTotalAdmins = async () =>{
     }).catch((err) => {throw err});
 };
 
-exports.countProductsOfName = async (name) => {
+exports.countAdminsOfName = async (name) => {
     return await users.count({
         where: {
             LaAdmin: 'ADMIN',
