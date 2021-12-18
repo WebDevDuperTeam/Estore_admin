@@ -21,7 +21,7 @@ hbs.registerHelper('isEquals', function(value1, value2) {return value1 === value
 hbs.registerHelper("listPage", function (currentPage, maxNumberOfPages, formLink, originalUrl, options) {
   let result = "";
   //calculate number of pages that need rendering
-  const maxPageShown = 3;
+  const maxPageShown = 6;
   const numberOfPageGroups = Math.ceil(maxNumberOfPages / maxPageShown);
   let i;
   for(i = 1; i < numberOfPageGroups; i++){
@@ -91,8 +91,6 @@ function getPageLink(originalUrl, pageQueryAttr, value){
       return originalUrl.concat("?" + pageQueryAttr + "=" + value);
     }
   }
-
-  return null;
 }
 function updateQueryStringParameter(uri, key, value) {
   var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
@@ -136,13 +134,24 @@ app.use(function (req, res, next) {
 })
 
 // set up router
-app.use('/', dashboardRouter);
-app.use('/billing', billingRouter);
-app.use('/dashboard', dashboardRouter);
-app.use('/profile', profileRouter);
-app.use('/products', productsRouter);
-app.use('/accounts', accountsRouter);
 app.use('/', authRouter);
+app.use('/', checkSignedIn, dashboardRouter);
+app.use('/billing', checkSignedIn, billingRouter);
+app.use('/dashboard', checkSignedIn, dashboardRouter);
+app.use('/profile', checkSignedIn, profileRouter);
+app.use('/products', checkSignedIn, productsRouter);
+app.use('/accounts', checkSignedIn, accountsRouter);
+
+//Check if user has signed in
+function checkSignedIn(req, res, next) {
+  if(!res.locals.user){
+    res.redirect('/signin');
+  }
+  else{
+    next();
+  }
+}
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -150,7 +159,7 @@ app.use(function(req, res, next) {
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function(err, req, res) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
