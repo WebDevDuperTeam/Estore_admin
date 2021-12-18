@@ -14,6 +14,11 @@ const hbs = require("hbs");
 const session = require("express-session");
 const bodyParser = require("body-parser");
 const passport = require("./auth/passport");
+
+//TODO: Implement redis store to session
+
+// const redisStore = require('connect-redis')(session);
+// const redisClient = require('./session-store/redisClient');
 const app = express();
 
 //register hbs helper
@@ -108,7 +113,6 @@ app.locals.activeSideBarClass = "active bg-gradient-primary";
 
 // view engine setup
 hbs.registerPartials(path.join(__dirname, 'views/partials'));
-
 app.set('views', [__dirname + '/views/layouts'
                   ,__dirname + '/components/'
                   ,__dirname + '/components/auth/views'
@@ -118,20 +122,24 @@ app.set('views', [__dirname + '/views/layouts'
                   ,__dirname + '/components/products'
                   ,__dirname + '/components/accounts']);
 app.set('view engine', 'hbs');
-
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(session({ secret: process.env.SESSION_SECRET}));
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(session({
+  // store: new redisStore({client: redisClient, ttl: 3600 * 24 * 30}),
+  // saveUninitialized: false,
+  // resave: false
+  secret: process.env.SESSION_SECRET,
+}));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(function (req, res, next) {
   res.locals.user = req.user;
   next();
-})
+});
 
 // set up router
 app.use('/', authRouter);
