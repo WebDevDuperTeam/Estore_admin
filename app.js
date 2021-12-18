@@ -142,7 +142,7 @@ app.use('/profile', checkSignedIn, profileRouter);
 app.use('/products', checkSignedIn, productsRouter);
 app.use('/accounts', checkSignedIn, accountsRouter);
 
-//Check if user has signed in
+//Check if user has signed in. If not, redirect to sign in site
 function checkSignedIn(req, res, next) {
   if(!res.locals.user){
     res.redirect('/signin');
@@ -151,7 +151,6 @@ function checkSignedIn(req, res, next) {
     next();
   }
 }
-
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
