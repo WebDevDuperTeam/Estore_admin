@@ -1,4 +1,5 @@
 const {models} = require("../../models");
+const kickbox = require('kickbox').client(process.env.KICKBOX_API_KEY).kickbox();
 const bcrypt = require("bcrypt");
 const users = models.users;
 const salt = 10;
@@ -24,4 +25,18 @@ exports.registerUser = async (firstName, lastName, email, password) => {
     }
     //create new account
     return await users.create({USER_ID: NewID, TEN: firstName, HO: lastName, EMAIL: email, SO_BANKING: 0, PASS: hashPass, LaAdmin: 'ADMIN'});
-}
+};
+
+exports.checkEmailValidity = (email) => {
+    let result = 'undeliverable';
+    kickbox.verify(email, function (err, response) {
+        result = response.body.result;
+    });
+
+    return result === 'deliverable';
+};
+
+//TODO: implement send activation email
+exports.sendActivationMail = (email) => {
+
+};

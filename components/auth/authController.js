@@ -1,8 +1,4 @@
 const authService = require('./authService');
-const kickbox = require('kickbox')
-    .client('live_e28a524a39ae76e0527883267a85c1918a2a2be6ba8544083cf346fbd6816eb6')
-    .kickbox();
-
 exports.logout = (req, res) => {
     req.logout();
     res.redirect('/');
@@ -25,13 +21,10 @@ exports.signUpNewUser = async (req, res) => {
     else{ //All info has been filled
         try{
             //validate email user signed up with
-            let result = 'undeliverable';
-            kickbox.verify(email, function (err, response) {
-                result = response.body.result;
-            });
+            const result = authService.checkEmailValidity(email);
 
-            if(result === 'deliverable'){
-                //TODO: send activation email
+            if(result){ //email is valid
+                authService.sendActivationMail(email);
 
                 //if activate successfully, register in database
                 const user = await authService.registerUser(firstName, lastName, email, password);
