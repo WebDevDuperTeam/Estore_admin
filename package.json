@@ -20,10 +20,12 @@
     "kickbox": "^2.0.4",
     "morgan": "~1.9.1",
     "mysql2": "^2.3.3",
+    "nodemailer": "^6.7.2",
     "passport": "^0.5.0",
     "passport-local": "^1.0.0",
     "redis": "^4.0.1",
-    "sequelize": "^6.12.0-alpha.1"
+    "sequelize": "^6.12.0-alpha.1",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "nodemon": "^2.0.15",

@@ -19,7 +19,7 @@ module.exports = function(sequelize, DataTypes) {
         key: 'QUANAO_ID'
       }
     },
-    SOLUONGMUA: {
+    SO_LUONG_MUA: {
       type: DataTypes.INTEGER,
       allowNull: true
     }

@@ -18,26 +18,33 @@ exports.signUpNewUser = async (req, res) => {
     if(!email || !password || !firstName || !lastName){ //Check if user has input all info needed
         res.render('signup', {missingInfo: true, layout: 'signLayout'});
     }
+
+    //TODO: Check confirm password vs password
+
     else{ //All info has been filled
         try{
-            //validate email user signed up with
-            const result = authService.checkEmailValidity(email);
+            //TODO: check if email is valid
+            const valid = true;//authService.checkEmailValidity(email);
 
-            if(result){ //email is valid
-                authService.sendActivationMail(email);
-
-                //if activate successfully, register in database
-                const user = await authService.registerUser(firstName, lastName, email, password);
-                req.login(user, function() {
-                    return res.redirect('/');
-                });
-            }
-            else{
+            if (!valid) { //email is not valid
                 res.render('signup', {emailInvalid: true, layout: 'signLayout'});
+            } else { //email is valid
+                const user = await authService.registerUser(firstName, lastName, email, password);
+                await authService.sendActivationMail(user.EMAIL, user.TOKEN);
+                res.render('activationMailSent', {email: user.EMAIL, layout: 'blankLayout'});
             }
         }
         catch (err) {
-            res.render('signup', {alreadyRegistered: true, layout: 'signLayout'});
+            if(err.name == 'Email has been registered'){
+                res.render('signup', {alreadyRegistered: true, layout: 'signLayout'});
+            }
+            else{
+                res.render('error', {error: err, layout: 'blankLayout'});
+            }
         }
     }
+}
+
+exports.verify = (req, res) => {
+
 }
