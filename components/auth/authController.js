@@ -30,12 +30,12 @@ exports.signUpNewUser = async (req, res) => {
                 res.render('signup', {emailInvalid: true, layout: 'signLayout'});
             } else { //email is valid
                 const user = await authService.registerUser(firstName, lastName, email, password);
-                await authService.sendActivationMail(user.EMAIL, user.TOKEN);
+                await authService.sendActivationMail(user.EMAIL, user.TEN, user.TOKEN);
                 res.render('activationMailSent', {email: user.EMAIL, layout: 'blankLayout'});
             }
         }
         catch (err) {
-            if(err.name == 'Email has been registered'){
+            if(err.name === 'Email has been registered'){
                 res.render('signup', {alreadyRegistered: true, layout: 'signLayout'});
             }
             else{
