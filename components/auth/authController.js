@@ -51,12 +51,12 @@ exports.activateAccount = async (req, res) => {
     const url = req.originalUrl;
     const token = url.substring(url.lastIndexOf('/') + 1);
 
-
     try{
         //get user with token and still has not expired
         const user = await accountsService.getUserWithToken(token);
 
         if (user) { //user found
+            //TODO: Create views for activate failed and success
             await authService.activateUser(user.USER_ID);
             res.render('activateSuccess', {layout: 'blankLayout'});
         } else { //user not found

@@ -53,8 +53,8 @@ exports.sendActivationMail = async (email, name, token) => {
                 host: 'smtp.ethereal.email',
                 port: 587,
                 auth: {
-                    user: 'muriel.feeney80@ethereal.email',
-                    pass: 'SQrTCT8q4w4tw9Hart'
+                    user: 'axel.ullrich87@ethereal.email',
+                    pass: '6GCTg8zjz59K5hu6Q4'
                 }
             });
             break;
