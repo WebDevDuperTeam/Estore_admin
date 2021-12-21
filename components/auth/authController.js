@@ -1,4 +1,6 @@
 const authService = require('./authService');
+const mailService = require('../mail/mailService');
+
 exports.logout = (req, res) => {
     req.logout();
     res.redirect('/');
@@ -23,14 +25,13 @@ exports.signUpNewUser = async (req, res) => {
 
     else{ //All info has been filled
         try{
-            //TODO: check if email is valid
-            const valid = true;//authService.checkEmailValidity(email);
+            const valid = mailService.checkEmailValidity(email);
 
             if (!valid) { //email is not valid
                 res.render('signup', {emailInvalid: true, layout: 'signLayout'});
             } else { //email is valid
                 const user = await authService.registerUser(firstName, lastName, email, password);
-                await authService.sendActivationMail(user.EMAIL, user.TEN, user.TOKEN);
+                await mailService.sendActivationMail(user.EMAIL, user.TEN, user.TOKEN);
                 res.render('activationMailSent', {email: user.EMAIL, layout: 'blankLayout'});
             }
         }

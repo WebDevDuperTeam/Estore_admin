@@ -4,14 +4,14 @@ const { Op } = require("sequelize");
 
 exports.countTotalAdmins = async () =>{
     return await users.count({
-        where: {LaAdmin: 'ADMIN'}
+        where: {LA_ADMIN: true}
     }).catch((err) => {throw err});
 };
 
 exports.countAdminsOfName = async (name) => {
     return await users.count({
         where: {
-            LaAdmin: 'ADMIN',
+            LA_ADMIN: true,
             [Op.or]: [
                 {HO: {[Op.substring]: name}},
                 {TEN: {[Op.substring]: name}}
@@ -28,7 +28,7 @@ exports.listAdminsOfName = async (itemPerPage =6, page=0, name) =>
         attribute: ['USER_ID', 'TEN', 'HO', 'EMAIL'],
         raw:true,
         where: {
-            LaAdmin: 'ADMIN',
+            LA_ADMIN: true,
             [Op.or]: [
                 {HO: {[Op.substring]: name}},
                 {TEN: {[Op.substring]: name}}
@@ -45,7 +45,7 @@ exports.listAdmins = async (itemPerPage =6, page=0) =>
         attribute: ['USER_ID', 'TEN', 'HO', 'EMAIL'],
         raw:true,
         where: {
-            LaAdmin: 'ADMIN'
+            LA_ADMIN: true,
         }
     }).catch((err)=>{throw err});
 
