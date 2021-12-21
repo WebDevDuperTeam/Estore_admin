@@ -1,5 +1,6 @@
 const authService = require('./authService');
 const mailService = require('../mail/mailService');
+const accountsService = require('../accounts/accountsService');
 
 exports.logout = (req, res) => {
     req.logout();
@@ -25,7 +26,7 @@ exports.signUpNewUser = async (req, res) => {
 
     else{ //All info has been filled
         try{
-            const valid = mailService.checkEmailValidity(email);
+            const valid = true;//mailService.checkEmailValidity(email);
 
             if (!valid) { //email is not valid
                 res.render('signup', {emailInvalid: true, layout: 'signLayout'});
@@ -46,6 +47,23 @@ exports.signUpNewUser = async (req, res) => {
     }
 }
 
-exports.verify = (req, res) => {
+exports.activateAccount = async (req, res) => {
+    const url = req.originalUrl;
+    const token = url.substring(url.lastIndexOf('/') + 1);
 
+
+    try{
+        //get user with token and still has not expired
+        const user = await accountsService.getUserWithToken(token);
+
+        if (user) { //user found
+            await authService.activateUser(user.USER_ID);
+            res.render('activateSuccess', {layout: 'blankLayout'});
+        } else { //user not found
+            res.render('activateFailed', {layout: 'blankLayout'});
+        }
+    }
+    catch (err){
+        res.render('error', {error: err, layout: 'blankLayout'});
+    }
 }

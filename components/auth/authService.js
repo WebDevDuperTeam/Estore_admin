@@ -24,3 +24,12 @@ exports.registerUser = async (firstName, lastName, email, password) => {
     return await users.create({TEN: firstName, HO: lastName, EMAIL: email, PASS: hashPass, LA_ADMIN: true,
                                 TOKEN: token, NGAY_HET_HAN_TOKEN: expireDateString});
 };
+
+exports.activateUser = async (id) => {
+    try {
+        await users.update({KICH_HOAT: true}, {where: {USER_ID: id}});
+    }
+    catch (err){
+        throw err;
+    }
+}

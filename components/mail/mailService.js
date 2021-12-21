@@ -53,8 +53,8 @@ exports.sendActivationMail = async (email, name, token) => {
                 host: 'smtp.ethereal.email',
                 port: 587,
                 auth: {
-                    user: 'lou.stoltenberg50@ethereal.email',
-                    pass: 'dDEFs8NgUgEVCS2rHn'
+                    user: 'muriel.feeney80@ethereal.email',
+                    pass: 'SQrTCT8q4w4tw9Hart'
                 }
             });
             break;
@@ -85,7 +85,7 @@ exports.sendActivationMail = async (email, name, token) => {
             `https://managefahsion.herokuapp.com/account-activate/${token}\n\n` +
             `The link will only be active within the next 24 hours. Please activate your account before it expires.`,
         template: 'activationMail',
-        context: {name, token: token}
+        context: {name, token}
     };
 
     // send mail with defined transport object

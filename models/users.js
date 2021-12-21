@@ -33,7 +33,7 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true,
       defaultValue: 0
     },
-    KICHHOAT: {
+    KICH_HOAT: {
       type: DataTypes.BOOLEAN,
       allowNull: true,
       defaultValue: 0

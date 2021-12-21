@@ -1,6 +1,6 @@
-const {models} = require('../../models/index');
+const {models, sequelize} = require('../../models/index');
 const users = models.users;
-const { Op } = require("sequelize");
+const { Op, where} = require("sequelize");
 
 exports.countTotalAdmins = async () =>{
     return await users.count({
@@ -48,5 +48,20 @@ exports.listAdmins = async (itemPerPage =6, page=0) =>
             LA_ADMIN: true,
         }
     }).catch((err)=>{throw err});
+};
 
+exports.getUserWithToken = async (token) => {
+    return await users.findOne({
+        raw: true,
+        where:{
+            [Op.and]: [
+                {TOKEN: token},
+                {KICH_HOAT: false},
+                sequelize.where(
+                    sequelize.fn('TIMESTAMPDIFF', sequelize.literal('SECOND'), sequelize.fn('NOW'), sequelize.col('NGAY_HET_HAN_TOKEN')),
+                    {[Op.gt]: 0}
+                )
+            ]
+        }
+    });
 };
