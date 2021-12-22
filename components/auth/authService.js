@@ -1,5 +1,4 @@
 const {models} = require("../../models");
-const { v4: uuidv4 } = require('uuid');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 const users = models.users;
@@ -13,8 +12,8 @@ exports.registerUser = async (firstName, lastName, email, password) => {
         throw {name: "Email has been registered", message: "Email has already been registered."};
     }
 
+    //prepare attributes
     const hashPass = await bcrypt.hash(password, salt);
-    const NewID = uuidv4();
     const token = crypto.randomBytes(64).toString("hex");
     let expireDate = new Date();
     expireDate.setHours(expireDate.getHours() + 24); //token will expire after 24 hours
@@ -22,7 +21,7 @@ exports.registerUser = async (firstName, lastName, email, password) => {
 
     //create new account
     return await users.create({TEN: firstName, HO: lastName, EMAIL: email, PASS: hashPass, LA_ADMIN: true,
-                                TOKEN: token, NGAY_HET_HAN_TOKEN: expireDateString});
+                            TOKEN: token, NGAY_HET_HAN_TOKEN: expireDateString});
 };
 
 exports.activateUser = async (id) => {

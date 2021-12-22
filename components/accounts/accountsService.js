@@ -65,3 +65,23 @@ exports.getUserWithToken = async (token) => {
         }
     });
 };
+
+exports.getUserWithEmail = async (email, isActive) => {
+    return await users.findOne({
+        raw: true,
+        where: {EMAIL: email, KICH_HOAT: isActive}
+    });
+};
+
+exports.setNewTokenForUser = async (id, token) => {
+    let expires = new Date();
+    expires.setHours(expires.getHours() + 24);
+    const expiresStr = expires.toISOString();
+
+    try {
+        await users.update({TOKEN: token, NGAY_HET_HAN_TOKEN: expiresStr}, {where: {USER_ID: id}});
+    }
+    catch (err){
+        throw err;
+    }
+}

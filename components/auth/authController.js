@@ -1,10 +1,15 @@
 const authService = require('./authService');
 const mailService = require('../mail/mailService');
 const accountsService = require('../accounts/accountsService');
+const crypto = require('crypto');
 
 exports.logout = (req, res) => {
     req.logout();
     res.redirect('/');
+}
+
+exports.showForgetPasswordPage = (req, res) => {
+    res.render('forgetPassword', {layout: 'blankLayout'});
 }
 
 exports.showSignInPage = (req, res) => {
@@ -21,16 +26,15 @@ exports.signUpNewUser = async (req, res) => {
     if(!email || !password || !firstName || !lastName){ //Check if user has input all info needed
         res.render('signup', {missingInfo: true, layout: 'signLayout'});
     }
-
     //TODO: Check confirm password vs password
 
-    else{ //All info has been filled
+    else{   //All info has been filled
         try{
-            const valid = true;//mailService.checkEmailValidity(email);
+            const deliverable = mailService.checkEmailDeliverability(email);
 
-            if (!valid) { //email is not valid
+            if (!deliverable) { //cannot send mail there
                 res.render('signup', {emailInvalid: true, layout: 'signLayout'});
-            } else { //email is valid
+            } else { //mail can be sent
                 const user = await authService.registerUser(firstName, lastName, email, password);
                 await mailService.sendActivationMail(user.EMAIL, user.TEN, user.TOKEN);
                 res.render('activationMailSent', {email: user.EMAIL, layout: 'blankLayout'});
@@ -39,6 +43,10 @@ exports.signUpNewUser = async (req, res) => {
         catch (err) {
             if(err.name === 'Email has been registered'){
                 res.render('signup', {alreadyRegistered: true, layout: 'signLayout'});
+            }
+            else if(err.name === 'Unsupported Email Service'){
+                //TODO: design domainNotSupported page
+                res.render('domainNotSupported', {layout: 'blankLayout'});
             }
             else{
                 res.render('error', {error: err, layout: 'blankLayout'});
@@ -56,7 +64,6 @@ exports.activateAccount = async (req, res) => {
         const user = await accountsService.getUserWithToken(token);
 
         if (user) { //user found
-            //TODO: Create views for activate failed and success
             await authService.activateUser(user.USER_ID);
             res.render('activateSuccess', {layout: 'blankLayout'});
         } else { //user not found
@@ -66,4 +73,29 @@ exports.activateAccount = async (req, res) => {
     catch (err){
         res.render('error', {error: err, layout: 'blankLayout'});
     }
+}
+
+exports.sendResetPasswordMail = async (req, res) => {
+    const email = req.body.email;
+    const user = await accountsService.getUserWithEmail(email, true);
+
+    if(user){   //found legit user
+        try {
+            const token = crypto.randomBytes(64).toString('hex');
+            await accountsService.setNewTokenForUser(user.USER_ID, token);
+            await mailService.sendResetPasswordMail(email, user.TEN, token);
+
+            res.render('forgetPassword', {layout: 'blankLayout', emailSent: user.EMAIL});
+        }
+        catch (err) {
+            res.render('error', {error: err, layout: 'blankLayout'});
+        }
+    }
+    else{   //cannot found user with email provided
+        res.render('resetPasswordFailed', {layout: 'blankLayout'});
+    }
+}
+
+exports.resetPassword = (req, res) => {
+
 }
