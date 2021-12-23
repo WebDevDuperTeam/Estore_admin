@@ -14,8 +14,7 @@ const hbs = require("hbs");
 const session = require("express-session");
 const bodyParser = require("body-parser");
 const passport = require("./auth/passport");
-
-//TODO: Implement redis store to session
+//TODO: implement redis cloud
 
 // const redisStore = require('connect-redis')(session);
 // const redisClient = require('./session-store/redisClient');
@@ -131,7 +130,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(session({
   // store: new redisStore({client: redisClient, ttl: 3600 * 24 * 30}),
   // saveUninitialized: false,
-  // resave: false
+  // resave: false,
   secret: process.env.SESSION_SECRET,
 }));
 app.use(passport.initialize());

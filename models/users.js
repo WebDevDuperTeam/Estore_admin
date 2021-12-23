@@ -39,7 +39,7 @@ module.exports = function(sequelize, DataTypes) {
       defaultValue: 0
     },
     TOKEN: {
-      type: DataTypes.CHAR(200),
+      type: DataTypes.CHAR(255),
       allowNull: true,
       defaultValue: "0"
     },

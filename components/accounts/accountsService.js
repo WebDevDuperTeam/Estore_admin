@@ -1,6 +1,9 @@
 const {models, sequelize} = require('../../models/index');
 const users = models.users;
 const { Op, where} = require("sequelize");
+const crypto = require("crypto");
+const bcrypt = require("bcrypt");
+const salt = Number(process.env.BCRYPT_SALT);
 
 exports.countTotalAdmins = async () =>{
     return await users.count({
@@ -50,13 +53,13 @@ exports.listAdmins = async (itemPerPage =6, page=0) =>
     }).catch((err)=>{throw err});
 };
 
-exports.getUserWithToken = async (token) => {
-    return await users.findOne({
+exports.getUserWithToken = async (id, token, isActive) => {
+    const user = await users.findOne({
         raw: true,
         where:{
             [Op.and]: [
-                {TOKEN: token},
-                {KICH_HOAT: false},
+                {USER_ID: id},
+                {KICH_HOAT: isActive},
                 sequelize.where(
                     sequelize.fn('TIMESTAMPDIFF', sequelize.literal('SECOND'), sequelize.fn('NOW'), sequelize.col('NGAY_HET_HAN_TOKEN')),
                     {[Op.gt]: 0}
@@ -64,6 +67,14 @@ exports.getUserWithToken = async (token) => {
             ]
         }
     });
+
+    if(user) {
+        const isValidToken = bcrypt.compare(token, user.TOKEN);
+        if (isValidToken) {
+            return user;
+        }
+    }
+    return null;
 };
 
 exports.getUserWithEmail = async (email, isActive) => {
@@ -73,13 +84,22 @@ exports.getUserWithEmail = async (email, isActive) => {
     });
 };
 
-exports.setNewTokenForUser = async (id, token) => {
+exports.getUserWithId = async (id, isActive) => {
+    return await users.findOne({
+        where: {USER_ID: id, KICH_HOAT: isActive}
+    });
+}
+
+exports.setNewTokenForUser = async (id) => {
     let expires = new Date();
     expires.setHours(expires.getHours() + 24);
     const expiresStr = expires.toISOString();
+    const token = crypto.randomBytes(64).toString('hex');
+    const hashedToken = await bcrypt.hash(token, salt);
 
     try {
-        await users.update({TOKEN: token, NGAY_HET_HAN_TOKEN: expiresStr}, {where: {USER_ID: id}});
+        await users.update({TOKEN: hashedToken, NGAY_HET_HAN_TOKEN: expiresStr}, {where: {USER_ID: id}});
+        return token;
     }
     catch (err){
         throw err;

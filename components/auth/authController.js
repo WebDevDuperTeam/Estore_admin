@@ -2,6 +2,8 @@ const authService = require('./authService');
 const mailService = require('../mail/mailService');
 const accountsService = require('../accounts/accountsService');
 const crypto = require('crypto');
+const bcrypt = require('bcrypt');
+const salt = Number(process.env.BCRYPT_SALT);
 
 exports.logout = (req, res) => {
     req.logout();
@@ -21,22 +23,24 @@ exports.showSignUpPage = (req, res) => {
 }
 
 exports.signUpNewUser = async (req, res) => {
-    const {firstName, lastName, email, password} = req.body;
+    const {firstName, lastName, email, password, confirmPassword} = req.body;
 
-    if(!email || !password || !firstName || !lastName){ //Check if user has input all info needed
+    if(!email || !password || !firstName || !lastName || !confirmPassword){ //Check if user has input all info needed
         res.render('signup', {missingInfo: true, layout: 'signLayout'});
     }
-    //TODO: Check confirm password vs password
-
-    else{   //All info has been filled
+    else if(password !== confirmPassword){
+        res.render('signup', {differentPassword: true, layout: 'signLayout'});
+    }
+    else{   //All info has been filled and password valid
         try{
-            const deliverable = mailService.checkEmailDeliverability(email);
+            const deliverable = true;//mailService.checkEmailDeliverability(email);
 
             if (!deliverable) { //cannot send mail there
                 res.render('signup', {emailInvalid: true, layout: 'signLayout'});
-            } else { //mail can be sent
-                const user = await authService.registerUser(firstName, lastName, email, password);
-                await mailService.sendActivationMail(user.EMAIL, user.TEN, user.TOKEN);
+            }
+            else { //activation mail can be sent
+                const {user, token} = await authService.registerUser(firstName, lastName, email, password);
+                await mailService.sendActivationMail(user.EMAIL, user.TEN, token, user.USER_ID);
                 res.render('activationMailSent', {email: user.EMAIL, layout: 'blankLayout'});
             }
         }
@@ -45,8 +49,7 @@ exports.signUpNewUser = async (req, res) => {
                 res.render('signup', {alreadyRegistered: true, layout: 'signLayout'});
             }
             else if(err.name === 'Unsupported Email Service'){
-                //TODO: design domainNotSupported page
-                res.render('domainNotSupported', {layout: 'blankLayout'});
+                res.render('activateFailed', {layout: 'blankLayout'});
             }
             else{
                 res.render('error', {error: err, layout: 'blankLayout'});
@@ -56,17 +59,18 @@ exports.signUpNewUser = async (req, res) => {
 }
 
 exports.activateAccount = async (req, res) => {
-    const url = req.originalUrl;
-    const token = url.substring(url.lastIndexOf('/') + 1);
+    const token = req.query.token;
+    const userId = req.query.id;
 
     try{
         //get user with token and still has not expired
-        const user = await accountsService.getUserWithToken(token);
+        const user = await accountsService.getUserWithToken(userId, token, false);
 
-        if (user) { //user found
+        if (user) {
             await authService.activateUser(user.USER_ID);
             res.render('activateSuccess', {layout: 'blankLayout'});
-        } else { //user not found
+        }
+        else { //cannot find user with valid token
             res.render('activateFailed', {layout: 'blankLayout'});
         }
     }
@@ -81,9 +85,8 @@ exports.sendResetPasswordMail = async (req, res) => {
 
     if(user){   //found legit user
         try {
-            const token = crypto.randomBytes(64).toString('hex');
-            await accountsService.setNewTokenForUser(user.USER_ID, token);
-            await mailService.sendResetPasswordMail(email, user.TEN, token);
+            const token = await accountsService.setNewTokenForUser(user.USER_ID);
+            await mailService.sendResetPasswordMail(email, user.TEN, token, user.USER_ID);
 
             res.render('forgetPassword', {layout: 'blankLayout', emailSent: user.EMAIL});
         }
@@ -96,6 +99,22 @@ exports.sendResetPasswordMail = async (req, res) => {
     }
 }
 
-exports.resetPassword = (req, res) => {
+//TODO: implement function. Get token in req and reset password for user (if legit)
+exports.resetPassword = async (req, res) => {
+    const url = req.originalUrl;
+    const token = url.substring(url.lastIndexOf('/') + 1);
 
+    try{
+        const user = await accountsService.getUserWithToken(token, true);
+
+        if(user){   //found user with provided token
+            res.render('resetPassword', {layout: 'blankLayout'});
+        }
+        else{   //cannot find user with provided token
+
+        }
+    }
+    catch(err){
+
+    }
 }

@@ -1,6 +1,7 @@
 const nodemailer = require("nodemailer");
 const kickbox = require('kickbox').client(process.env.KICKBOX_API_KEY).kickbox();
 const hbsNodeMailer = require('nodemailer-express-handlebars');
+const website_url = `https://managefahsion.herokuapp.com`;
 
 exports.checkEmailDeliverability = (email) => {
     let result = 'undeliverable';
@@ -11,11 +12,13 @@ exports.checkEmailDeliverability = (email) => {
     return result === 'deliverable';
 };
 
-exports.sendActivationMail = async (email, name, token) => {
+exports.sendActivationMail = async (email, name, token, id) => {
     const domain = getMailDomain(email);
     try{
         const transporter = getTransporter(domain);
         const sender = getSender(domain);
+        const link = `${website_url}/account-activate?token=${token}&id=${id}`;
+
         //create message
         const message = {
             from: `"Estore Admin 💼"<${sender}>`,
@@ -23,11 +26,12 @@ exports.sendActivationMail = async (email, name, token) => {
             subject: "Activate your account ✔",
             text: `Hello ${name}` +
                 `Welcome to Estore Admin, we're excited to have you onboard.\n` +
-                `In order to activate your acounnt please follow this link:\n` +
-                `https://managefahsion.herokuapp.com/account-activate/${token}\n\n` +
+                `In order to activate your acounnt please follow this link:\n`+
+                `${link}\n\n`+
                 `The link will only be active within the next 24 hours. Please activate your account before it expires.`,
+            //TODO: recheck activate mail with new link variable
             template: 'activationMail',
-            context: {name, token}
+            context: {name, link}
         };
 
         // send mail with defined transport object
@@ -39,12 +43,13 @@ exports.sendActivationMail = async (email, name, token) => {
 };
 
 
-exports.sendResetPasswordMail = async (email, name, token) => {
+exports.sendResetPasswordMail = async (email, name, token, id) => {
     const domain = getMailDomain(email);
 
     try{
         const transporter = getTransporter(domain);
         const sender = getSender(domain);
+        const link = `${website_url}/forget-password?token=${token}&id=${id}`;
 
         //create message
         const message = {
@@ -54,11 +59,11 @@ exports.sendResetPasswordMail = async (email, name, token) => {
             text: `Hello ${name}` +
                 `You requested to have your password reset.\n` +
                 `In order to reset password please follow this link:\n` +
-                `https://managefahsion.herokuapp.com/forget-password/${token}\n\n` +
+                 `${link}\n\n`+
                 `The link will only be active within the next 24 hours. Please reset your password before it expires.`,
-            //TODO: design reset password email
+            //TODO: recheck reset pass mail with new link variable
             template: 'resetPasswordMail',
-            context: {name, token}
+            context: {name, link}
         };
 
         // send mail with defined transport object
@@ -130,8 +135,8 @@ function getTransporter(domain){
                 host: 'smtp.ethereal.email',
                 port: 587,
                 auth: {
-                    user: 'sonya.hodkiewicz77@ethereal.email',
-                    pass: 'fDJqhPH9gMGmfg2NAp'
+                    user: 'jerome.wyman96@ethereal.email',
+                    pass: 'kccftjGt6Fwp9r9mrA'
                 }
             });
             break;
