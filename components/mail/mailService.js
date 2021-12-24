@@ -29,7 +29,6 @@ exports.sendActivationMail = async (email, name, token, id) => {
                 `In order to activate your acounnt please follow this link:\n`+
                 `${link}\n\n`+
                 `The link will only be active within the next 24 hours. Please activate your account before it expires.`,
-            //TODO: recheck activate mail with new link variable
             template: 'activationMail',
             context: {name, link}
         };
@@ -49,7 +48,7 @@ exports.sendResetPasswordMail = async (email, name, token, id) => {
     try{
         const transporter = getTransporter(domain);
         const sender = getSender(domain);
-        const link = `${website_url}/forget-password?token=${token}&id=${id}`;
+        const link = `${website_url}/reset-password?token=${token}&id=${id}`;
 
         //create message
         const message = {
@@ -60,8 +59,7 @@ exports.sendResetPasswordMail = async (email, name, token, id) => {
                 `You requested to have your password reset.\n` +
                 `In order to reset password please follow this link:\n` +
                  `${link}\n\n`+
-                `The link will only be active within the next 24 hours. Please reset your password before it expires.`,
-            //TODO: recheck reset pass mail with new link variable
+                `The link will only be active within the next hour. Please reset your password before it expires.`,
             template: 'resetPasswordMail',
             context: {name, link}
         };
@@ -116,8 +114,8 @@ function getTransporter(domain){
             transporter = nodemailer.createTransport({
                 service: "Outlook365",
                 auth: {
-                    user: 'annabell.klein68@ethereal.email',
-                    pass: '97entGXhaJ4FVj2DbR'
+                    user: process.env.OUTLOOK_ACCOUNT,
+                    pass: process.env.OUTLOOK_PASSWORD
                 }
             });
             break;
@@ -135,8 +133,8 @@ function getTransporter(domain){
                 host: 'smtp.ethereal.email',
                 port: 587,
                 auth: {
-                    user: 'jerome.wyman96@ethereal.email',
-                    pass: 'kccftjGt6Fwp9r9mrA'
+                    user: 'iw34pic7aplvulk3@ethereal.email',
+                    pass: 'fdKxW6Jytez1RT5S6C'
                 }
             });
             break;

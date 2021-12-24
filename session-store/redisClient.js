@@ -15,8 +15,8 @@ redisClient.on('connect', function(){
 (async () => {
     await redisClient.connect()
         .catch(err => {console.log('Redis connect error: ' + err.message)});
-    await redisClient.auth(process.env.REDIS_PASSWORD)
-        .catch(err => {console.log('Redis auth error: ' + err.message)});
+    // await redisClient.auth(process.env.REDIS_PASSWORD)
+    //     .catch(err => {console.log('Redis auth error: ' + err.message)});
 })();
 
 module.exports = redisClient;

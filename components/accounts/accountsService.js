@@ -90,9 +90,9 @@ exports.getUserWithId = async (id, isActive) => {
     });
 }
 
-exports.setNewTokenForUser = async (id) => {
+exports.setNewTokenForUser = async (id, expireHours = 24) => {
     let expires = new Date();
-    expires.setHours(expires.getHours() + 24);
+    expires.setHours(expires.getHours() + expireHours);
     const expiresStr = expires.toISOString();
     const token = crypto.randomBytes(64).toString('hex');
     const hashedToken = await bcrypt.hash(token, salt);
@@ -100,6 +100,16 @@ exports.setNewTokenForUser = async (id) => {
     try {
         await users.update({TOKEN: hashedToken, NGAY_HET_HAN_TOKEN: expiresStr}, {where: {USER_ID: id}});
         return token;
+    }
+    catch (err){
+        throw err;
+    }
+}
+
+exports.changePassword = async (id, password) => {
+    try {
+        const hashedPassword = await bcrypt.hash(password, salt);
+        await users.update({PASSWORD: hashedPassword}, {where: {USER_ID: id}});
     }
     catch (err){
         throw err;

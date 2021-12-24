@@ -8,9 +8,13 @@ router.get('/signup', authController.showSignUpPage);
 router.get('/logout', authController.logout);
 router.get('/account-activate', authController.activateAccount);
 router.get('/forget-password', authController.showForgetPasswordPage);
+//TODO: check reset pass route
+router.get('/reset-password', authController.showResetPasswordPage);
 
 router.post('/signin', passport.authenticate('local', { successRedirect: '/', failureRedirect: '/signin?signInFail'}));
 router.post('/signup', authController.signUpNewUser);
 router.post('/forget-password', authController.sendResetPasswordMail);
+//TODO: check reset password process for post req from reset-pass page
+router.post('/reset-password', authController.resetPassword);
 
 module.exports = router;

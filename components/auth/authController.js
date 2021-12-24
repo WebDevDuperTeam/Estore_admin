@@ -1,9 +1,6 @@
 const authService = require('./authService');
 const mailService = require('../mail/mailService');
 const accountsService = require('../accounts/accountsService');
-const crypto = require('crypto');
-const bcrypt = require('bcrypt');
-const salt = Number(process.env.BCRYPT_SALT);
 
 exports.logout = (req, res) => {
     req.logout();
@@ -67,11 +64,12 @@ exports.activateAccount = async (req, res) => {
         const user = await accountsService.getUserWithToken(userId, token, false);
 
         if (user) {
+            //TODO: merge 2 activate pages into 1 view only
             await authService.activateUser(user.USER_ID);
-            res.render('activateSuccess', {layout: 'blankLayout'});
+            res.render('activateResult', {layout: 'blankLayout', success: true});
         }
-        else { //cannot find user with valid token
-            res.render('activateFailed', {layout: 'blankLayout'});
+        else { //cannot find user with valid tokens
+            res.render('activateResult', {layout: 'blankLayout', success: false});
         }
     }
     catch (err){
@@ -85,7 +83,7 @@ exports.sendResetPasswordMail = async (req, res) => {
 
     if(user){   //found legit user
         try {
-            const token = await accountsService.setNewTokenForUser(user.USER_ID);
+            const token = await accountsService.setNewTokenForUser(user.USER_ID, 1);
             await mailService.sendResetPasswordMail(email, user.TEN, token, user.USER_ID);
 
             res.render('forgetPassword', {layout: 'blankLayout', emailSent: user.EMAIL});
@@ -99,22 +97,40 @@ exports.sendResetPasswordMail = async (req, res) => {
     }
 }
 
-//TODO: implement function. Get token in req and reset password for user (if legit)
 exports.resetPassword = async (req, res) => {
-    const url = req.originalUrl;
-    const token = url.substring(url.lastIndexOf('/') + 1);
+    const id = req.query.id;
+    const token = req.query.token;
+    const password = req.body.password;
+    const confirmPassword = req.body.confirmPassword;
+    const validPass = (password !== confirmPassword);
+    const user = accountsService.getUserWithToken(id, token, true);
 
-    try{
-        const user = await accountsService.getUserWithToken(token, true);
-
-        if(user){   //found user with provided token
-            res.render('resetPassword', {layout: 'blankLayout'});
+    if (!validPass) {
+        res.render('resetPassword', {layout: 'blankLayout', differentPass: true});
+    } else if (!user) {
+        res.render('resetPassResult', {layout: 'blankLayout', success: false});
+    } else {
+        try {
+            await accountsService.changePassword(id, password);
+            res.render('resetPassResult', {layout: 'blankLayout', success: true});
         }
-        else{   //cannot find user with provided token
-
+        catch (err){
+            res.render('resetPassResult', {layout: 'blankLayout', success: false});
         }
     }
-    catch(err){
+}
 
+exports.showResetPasswordPage = (req, res) => {
+    const id = req.query.id;
+    const token = req.query.token;
+    const user = accountsService.getUserWithToken(id, token, true);
+
+    if(user){   //found legit user
+        //TODO: design reset password page
+        res.render('resetPassword', {layout: 'blankLayout'});
+    }
+    else{   //user cannot be found
+        //TODO: design reset password result page
+        res.render('resetPassResult', {layout: 'blankLayout', success: false});
     }
 }

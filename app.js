@@ -3,6 +3,9 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const hbs = require("hbs");
+const session = require("express-session");
+const bodyParser = require("body-parser");
 
 const billingRouter = require('./components/billing/billingRouter');
 const dashboardRouter = require('./components/dashboard/dashboardRouter');
@@ -10,15 +13,13 @@ const profileRouter = require('./components/profile/profileRouter');
 const productsRouter = require('./components/products/productsRouter');
 const accountsRouter = require('./components/accounts/accountsRouter');
 const authRouter = require('./components/auth/authRouter');
-const hbs = require("hbs");
-const session = require("express-session");
-const bodyParser = require("body-parser");
 const passport = require("./auth/passport");
+const app = express();
 //TODO: implement redis cloud
-
+//
 // const redisStore = require('connect-redis')(session);
 // const redisClient = require('./session-store/redisClient');
-const app = express();
+
 
 //register hbs helper
 hbs.registerHelper('isEquals', function(value1, value2) {return value1 === value2;});
@@ -128,9 +129,12 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(session({
-  // store: new redisStore({client: redisClient, ttl: 3600 * 24 * 30}),
-  // saveUninitialized: false,
-  // resave: false,
+  // store: new redisStore({
+  //   client: redisClient
+  // }),
+  // cookie: {secure: true},
+  // saveUninitialized: true,
+  // resave: true,
   secret: process.env.SESSION_SECRET,
 }));
 app.use(passport.initialize());
