@@ -15,8 +15,9 @@ const accountsRouter = require('./components/accounts/accountsRouter');
 const authRouter = require('./components/auth/authRouter');
 const passport = require("./auth/passport");
 const app = express();
-//TODO: implement redis cloud
-//
+
+// TODO: implement redis cloud
+
 // const redisStore = require('connect-redis')(session);
 // const redisClient = require('./session-store/redisClient');
 

@@ -64,7 +64,6 @@ exports.activateAccount = async (req, res) => {
         const user = await accountsService.getUserWithToken(userId, token, false);
 
         if (user) {
-            //TODO: merge 2 activate pages into 1 view only
             await authService.activateUser(user.USER_ID);
             res.render('activateResult', {layout: 'blankLayout', success: true});
         }
@@ -102,8 +101,8 @@ exports.resetPassword = async (req, res) => {
     const token = req.query.token;
     const password = req.body.password;
     const confirmPassword = req.body.confirmPassword;
-    const validPass = (password !== confirmPassword);
-    const user = accountsService.getUserWithToken(id, token, true);
+    const validPass = (password === confirmPassword);
+    const user = await accountsService.getUserWithToken(id, token, true);
 
     if (!validPass) {
         res.render('resetPassword', {layout: 'blankLayout', differentPass: true});
@@ -126,11 +125,9 @@ exports.showResetPasswordPage = (req, res) => {
     const user = accountsService.getUserWithToken(id, token, true);
 
     if(user){   //found legit user
-        //TODO: design reset password page
         res.render('resetPassword', {layout: 'blankLayout'});
     }
     else{   //user cannot be found
-        //TODO: design reset password result page
         res.render('resetPassResult', {layout: 'blankLayout', success: false});
     }
 }

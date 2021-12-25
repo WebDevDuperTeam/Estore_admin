@@ -109,7 +109,7 @@ exports.setNewTokenForUser = async (id, expireHours = 24) => {
 exports.changePassword = async (id, password) => {
     try {
         const hashedPassword = await bcrypt.hash(password, salt);
-        await users.update({PASSWORD: hashedPassword}, {where: {USER_ID: id}});
+        await users.update({PASS: hashedPassword}, {where: {USER_ID: id}});
     }
     catch (err){
         throw err;

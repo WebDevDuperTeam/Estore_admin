@@ -133,8 +133,8 @@ function getTransporter(domain){
                 host: 'smtp.ethereal.email',
                 port: 587,
                 auth: {
-                    user: 'iw34pic7aplvulk3@ethereal.email',
-                    pass: 'fdKxW6Jytez1RT5S6C'
+                    user: 'destinee.hahn49@ethereal.email',
+                    pass: 'GC2JBfUtaTNP5DsHPh'
                 }
             });
             break;
