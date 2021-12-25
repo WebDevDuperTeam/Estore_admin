@@ -6,7 +6,7 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       primaryKey: true
     },
-    TENTHUONGHIEU: {
+    TEN_THUONG_HIEU: {
       type: DataTypes.STRING(100),
       allowNull: true
     }

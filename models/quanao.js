@@ -30,19 +30,19 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.DOUBLE,
       allowNull: true
     },
-    SOLUONG: {
+    SO_LUONG: {
       type: DataTypes.INTEGER,
       allowNull: true
     },
-    GIOITINH: {
+    GIOI_TINH: {
       type: DataTypes.STRING(100),
       allowNull: true
     },
-    DAXOA: {
+    DA_XOA: {
       type: DataTypes.BOOLEAN,
       allowNull: true
     },
-    link: {
+    LINK: {
       type: DataTypes.STRING(2083),
       allowNull: true
     }

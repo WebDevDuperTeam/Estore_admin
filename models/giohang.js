@@ -18,7 +18,7 @@ module.exports = function(sequelize, DataTypes) {
         key: 'USER_ID'
       }
     },
-    TRANGTHAI: {
+    TRANG_THAI: {
       type: DataTypes.INTEGER,
       allowNull: true
     }

@@ -21,7 +21,7 @@ exports.countProductsOfName = (name) => {
             as: 'LOAI',
             require: true,
             where: [{
-                TENLOAI: {[Op.substring]: name}
+                TEN_LOAI: {[Op.substring]: name}
             }]
         },
             {
@@ -30,7 +30,7 @@ exports.countProductsOfName = (name) => {
                 require: true
             }],
         where: [{
-            DAXOA: {[Op.is]: false},
+            DA_XOA: {[Op.is]: false},
         }]
     }).catch((err) => {throw err});
 };
@@ -39,7 +39,7 @@ exports.listProductsOfName = (itemPerPage =6, page = 0, name) => {
     return quanao.findAll({
         offset: page * itemPerPage,
         limit: itemPerPage,
-        attribute:['MAU', 'GIA', 'SOLUONG', 'GIOITINH'],
+        attribute:['MAU', 'GIA', 'SO_LUONG', 'GIOI_TINH'],
         include: [{
             model: kichthuoc,
             as:"kichthuocs",
@@ -49,7 +49,7 @@ exports.listProductsOfName = (itemPerPage =6, page = 0, name) => {
             as: 'LOAI',
             require: true,
             where: [{
-                TENLOAI: {[Op.substring]: name}
+                TEN_LOAI: {[Op.substring]: name}
             }]
         },
         {
@@ -58,7 +58,7 @@ exports.listProductsOfName = (itemPerPage =6, page = 0, name) => {
             require: true
         }],
         where: [{
-            DAXOA: {[Op.is]: false},
+            DA_XOA: {[Op.is]: false},
         }]
     }).catch((err) => {throw err});
 };
@@ -67,7 +67,7 @@ exports.listProducts = (itemPerPage =6, page = 0) => {
     return quanao.findAll({
         offset: page * itemPerPage,
         limit: itemPerPage,
-        attribute:['MAU', 'GIA', 'SOLUONG', 'GIOITINH'],
+        attribute:['MAU', 'GIA', 'SO_LUONG', 'GIOI_TINH'],
         include: [{
             model: kichthuoc,
             as:"kichthuocs",
@@ -82,20 +82,7 @@ exports.listProducts = (itemPerPage =6, page = 0) => {
             require: true
         }],
         where: [{
-            DAXOA: {[Op.is]: false}
+            DA_XOA: {[Op.is]: false}
         }]
     }).catch((err) => {throw err});
-};
-exports.listAdmins = (itemPerPage =6, page=0) =>
-{
-    return users.findAll({
-        offset: page * itemPerPage,
-        limit: itemPerPage,
-        attribute: ['USER_ID', 'TEN', 'HO', 'EMAIL'],
-        raw:true,
-        where: [{
-            LaAdmin: 'ADMIN'
-        }]
-    }).catch((err)=>{throw err});
-
 };

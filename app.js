@@ -3,6 +3,9 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const hbs = require("hbs");
+const session = require("express-session");
+const bodyParser = require("body-parser");
 
 const billingRouter = require('./components/billing/billingRouter');
 const dashboardRouter = require('./components/dashboard/dashboardRouter');
@@ -10,18 +13,21 @@ const profileRouter = require('./components/profile/profileRouter');
 const productsRouter = require('./components/products/productsRouter');
 const accountsRouter = require('./components/accounts/accountsRouter');
 const authRouter = require('./components/auth/authRouter');
-const hbs = require("hbs");
-const session = require("express-session");
-const bodyParser = require("body-parser");
 const passport = require("./auth/passport");
 const app = express();
+
+// TODO: implement redis cloud
+
+// const redisStore = require('connect-redis')(session);
+// const redisClient = require('./session-store/redisClient');
+
 
 //register hbs helper
 hbs.registerHelper('isEquals', function(value1, value2) {return value1 === value2;});
 hbs.registerHelper("listPage", function (currentPage, maxNumberOfPages, formLink, originalUrl, options) {
   let result = "";
   //calculate number of pages that need rendering
-  const maxPageShown = 3;
+  const maxPageShown = 6;
   const numberOfPageGroups = Math.ceil(maxNumberOfPages / maxPageShown);
   let i;
   for(i = 1; i < numberOfPageGroups; i++){
@@ -91,8 +97,6 @@ function getPageLink(originalUrl, pageQueryAttr, value){
       return originalUrl.concat("?" + pageQueryAttr + "=" + value);
     }
   }
-
-  return null;
 }
 function updateQueryStringParameter(uri, key, value) {
   var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
@@ -110,7 +114,6 @@ app.locals.activeSideBarClass = "active bg-gradient-primary";
 
 // view engine setup
 hbs.registerPartials(path.join(__dirname, 'views/partials'));
-
 app.set('views', [__dirname + '/views/layouts'
                   ,__dirname + '/components/'
                   ,__dirname + '/components/auth/views'
@@ -120,29 +123,46 @@ app.set('views', [__dirname + '/views/layouts'
                   ,__dirname + '/components/products'
                   ,__dirname + '/components/accounts']);
 app.set('view engine', 'hbs');
-
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(session({ secret: process.env.SESSION_SECRET}));
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(session({
+  // store: new redisStore({
+  //   client: redisClient
+  // }),
+  // cookie: {secure: true},
+  // saveUninitialized: true,
+  // resave: true,
+  secret: process.env.SESSION_SECRET,
+}));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(function (req, res, next) {
   res.locals.user = req.user;
   next();
-})
+});
 
 // set up router
-app.use('/', dashboardRouter);
-app.use('/billing', billingRouter);
-app.use('/dashboard', dashboardRouter);
-app.use('/profile', profileRouter);
-app.use('/products', productsRouter);
-app.use('/accounts', accountsRouter);
 app.use('/', authRouter);
+app.use('/', checkSignedIn, dashboardRouter);
+app.use('/billing', checkSignedIn, billingRouter);
+app.use('/dashboard', checkSignedIn, dashboardRouter);
+app.use('/profile', checkSignedIn, profileRouter);
+app.use('/products', checkSignedIn, productsRouter);
+app.use('/accounts', checkSignedIn, accountsRouter);
+
+//Check if user has signed in. If not, redirect to sign in site
+function checkSignedIn(req, res, next) {
+  if(!res.locals.user){
+    res.redirect('/signin');
+  }
+  else{
+    next();
+  }
+}
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -150,7 +170,7 @@ app.use(function(req, res, next) {
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function(err, req, res) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};

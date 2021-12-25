@@ -14,7 +14,7 @@ module.exports = function(sequelize, DataTypes) {
         key: 'QUANAO_ID'
       }
     },
-    USER_NAME: {
+    USERNAME: {
       type: DataTypes.STRING(50),
       allowNull: true
     },
@@ -22,7 +22,7 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       allowNull: true
     },
-    NOIDUNG: {
+    NOI_DUNG: {
       type: DataTypes.STRING(200),
       allowNull: true
     }
