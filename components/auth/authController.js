@@ -20,17 +20,20 @@ exports.showSignUpPage = (req, res) => {
 }
 
 exports.signUpNewUser = async (req, res) => {
-    const {firstName, lastName, email, password, confirmPassword} = req.body;
+    const {firstName, lastName, email, password, confirmPassword, agreeWithTerms} = req.body;
 
     if(!email || !password || !firstName || !lastName || !confirmPassword){ //Check if user has input all info needed
         res.render('signup', {missingInfo: true, layout: 'signLayout'});
+    }
+    else if(agreeWithTerms === undefined){
+        res.render('signup', {termsDisagree: true, layout: 'signLayout'});
     }
     else if(password !== confirmPassword){
         res.render('signup', {differentPassword: true, layout: 'signLayout'});
     }
     else{   //All info has been filled and password valid
         try{
-            const deliverable = true;//mailService.checkEmailDeliverability(email);
+            const deliverable = mailService.checkEmailDeliverability(email);
 
             if (!deliverable) { //cannot send mail there
                 res.render('signup', {emailInvalid: true, layout: 'signLayout'});
@@ -46,7 +49,7 @@ exports.signUpNewUser = async (req, res) => {
                 res.render('signup', {alreadyRegistered: true, layout: 'signLayout'});
             }
             else if(err.name === 'Unsupported Email Service'){
-                res.render('activateFailed', {layout: 'blankLayout'});
+                res.render('activateResult', {layout: 'blankLayout', success: false});
             }
             else{
                 res.render('error', {error: err, layout: 'blankLayout'});
