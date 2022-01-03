@@ -38,7 +38,7 @@
                                         <h6 class="mb-0">Profile Information</h6>
                                     </div>
                                     <div class="col-md-4 text-end">
-                                        <a href="javascript:;">
+                                        <a href="#" data-bs-toggle="modal" data-bs-target="#changeProfileModal">
                                             <i class="fas fa-user-edit text-secondary text-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Profile"></i>
                                         </a>
                                     </div>
@@ -240,6 +240,44 @@
     {{> footer}}
 </div>
 {{> settings}}
+<!--Change profile info modal-->
+<div class="modal fade" id="changeProfileModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title font-weight-normal" id="exampleModalLongTitle">Thay đổi thông tin tài khoản</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body font-weight-light">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="input-group input-group-static mb-4">
+                            <label>Họ</label>
+                            <input type="text" class="form-control" value="{{user.HO}}">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="input-group input-group-static mb-4">
+                            <label>Tên</label>
+                            <input type="text" class="form-control" value="{{user.TEN}}">
+                        </div>
+                    </div>
+                </div>
+                <div class="input-group input-group-static mb-4">
+                    <label>Số Banking</label>
+                    <input type="text" class="form-control" value="{{user.SO_BANKING}}">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn bg-gradient-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!--   Core JS Files   -->
 <script src="/javascripts/core/popper.min.js"></script>
 <script src="/javascripts/core/bootstrap.min.js"></script>
