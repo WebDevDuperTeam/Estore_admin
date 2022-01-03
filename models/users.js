@@ -38,6 +38,11 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true,
       defaultValue: 0
     },
+    KHOA: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+      defaultValue: 0
+    },
     TOKEN: {
       type: DataTypes.CHAR(255),
       allowNull: true,

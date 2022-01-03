@@ -5,16 +5,14 @@ const crypto = require("crypto");
 const bcrypt = require("bcrypt");
 const salt = Number(process.env.BCRYPT_SALT);
 
-exports.countTotalAdmins = async () =>{
-    return await users.count({
-        where: {LA_ADMIN: true}
-    }).catch((err) => {throw err});
+exports.countTotalUsers = async () =>{
+    return await users.count({where: {KICH_HOAT: true}}).catch((err) => {throw err});
 };
 
-exports.countAdminsOfName = async (name) => {
+exports.countUsersOfName = async (name) => {
     return await users.count({
         where: {
-            LA_ADMIN: true,
+            KICH_HOAT: true,
             [Op.or]: [
                 {HO: {[Op.substring]: name}},
                 {TEN: {[Op.substring]: name}}
@@ -23,15 +21,15 @@ exports.countAdminsOfName = async (name) => {
     }).catch((err) => {throw err});
 };
 
-exports.listAdminsOfName = async (itemPerPage =6, page=0, name) =>
+exports.listUsersOfName = async (itemPerPage =6, page=0, name) =>
 {
     return await users.findAll({
         offset: page * itemPerPage,
         limit: itemPerPage,
-        attribute: ['USER_ID', 'TEN', 'HO', 'EMAIL'],
+        attribute: ['TEN', 'HO', 'EMAIL', 'LA_ADMIN', 'KHOA'],
         raw:true,
         where: {
-            LA_ADMIN: true,
+            KICH_HOAT: true,
             [Op.or]: [
                 {HO: {[Op.substring]: name}},
                 {TEN: {[Op.substring]: name}}
@@ -40,16 +38,14 @@ exports.listAdminsOfName = async (itemPerPage =6, page=0, name) =>
     }).catch((err)=>{throw err});
 };
 
-exports.listAdmins = async (itemPerPage =6, page=0) =>
+exports.listUsers = async (itemPerPage =6, page=0) =>
 {
     return await users.findAll({
         offset: page * itemPerPage,
         limit: itemPerPage,
-        attribute: ['USER_ID', 'TEN', 'HO', 'EMAIL'],
-        raw:true,
-        where: {
-            LA_ADMIN: true,
-        }
+        where: {KICH_HOAT: true},
+        attribute: ['TEN', 'HO', 'EMAIL', 'LA_ADMIN', 'KHOA'],
+        raw:true
     }).catch((err)=>{throw err});
 };
 
@@ -110,6 +106,24 @@ exports.changePassword = async (id, password) => {
     try {
         const hashedPassword = await bcrypt.hash(password, salt);
         await users.update({PASS: hashedPassword}, {where: {USER_ID: id}});
+    }
+    catch (err){
+        throw err;
+    }
+}
+
+exports.lockUser = async (id) => {
+    try {
+        await users.update({KHOA: true}, {where: {USER_ID: id}});
+    }
+    catch (err){
+        throw err;
+    }
+}
+
+exports.unlockUser = async (id) => {
+    try {
+        await users.update({KHOA: false}, {where: {USER_ID: id}});
     }
     catch (err){
         throw err;
