@@ -25,7 +25,19 @@ exports.showPage = async (req, res) => {
 
         //pass data to view and render
         const paginateInfo = {page, maxNumberOfPages, originalUrl, formLink: '/accounts?page='};
-        res.render('accounts', {title: "Accounts Table", users, accountsActive: req.app.locals.activeSideBarClass, paginateInfo});
+        const cannotLockYourOwnAccount = req.session.cannotLockYourOwnAccount;
+        const cannotLock = req.session.cannotLock;
+        const cannotUnlock = req.session.cannotUnlock;
+
+        res.render('accounts', {title: "Accounts Table", users,
+            accountsActive: req.app.locals.activeSideBarClass,
+            paginateInfo,
+            cannotLockYourOwnAccount, cannotLock, cannotUnlock});
+
+        //reset session parameters
+        req.session['cannotLockYourOwnAccount'] = false;
+        req.session['cannotLock'] = false;
+        req.session['cannotUnlock'] = false;
     }
     catch (err) {
         res.render('error', {err});
@@ -38,6 +50,7 @@ exports.lockOrUnlockUser = async (req, res) => {
 
     //Không cho phép khóa tài khoản của chính mình
     if(currentAdmin.USER_ID === userId){
+        req.session['cannotLockYourOwnAccount'] = true;
         res.redirect('back');
     }
     else{
@@ -46,7 +59,8 @@ exports.lockOrUnlockUser = async (req, res) => {
                 await accountsService.unlockUser(userId);
             }
             catch (err){
-                //TODO: Xử lí khi gặp lỗi ko thể mở khóa người dùng
+                req.session['cannotLock'] = true;
+                res.redirect('back');
             }
         }
         else if(req.body.unlockButton){
@@ -54,7 +68,8 @@ exports.lockOrUnlockUser = async (req, res) => {
                 await accountsService.lockUser(userId);
             }
             catch (err){
-                //TODO: Xử lí khi gặp lỗi ko thể khóa người dùng
+                req.session['cannotUnlock'] = true;
+                res.redirect('back');
             }
         }
         res.redirect('back');
