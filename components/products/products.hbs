@@ -131,48 +131,6 @@
                                         </span>
                                     </td>
                                 </tr>
-                                <!--TODO: chưa thể scroll modal với mousewheel-->
-                                <div class="modal fade" id="editModal{{QUANAO_ID}}" tabindex="-1" role="dialog" aria-labelledby="editModal" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered modal-" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title font-weight-bold" id="modal-title-default">Chỉnh sửa sản phẩm</h5>
-                                                <button type="button" style="background-color: black;" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <div class="input-group input-group-static mb-4">
-                                                    <label>Tên sản phẩm</label>
-                                                    <input type="text" class="form-control" value="{{LOAI.TEN_LOAI}}">
-                                                </div>
-                                                <div class="input-group input-group-static mb-4">
-                                                    <label>Màu sắc</label>
-                                                    <input type="text" class="form-control" value="{{MAU}}">
-                                                </div>
-                                                <div class="input-group input-group-static mb-4">
-                                                    <label>Giới tính phù hợp</label>
-                                                    <input type="text" class="form-control" value="{{GIOI_TINH}}">
-                                                </div>
-                                                <div class="input-group input-group-static mb-4">
-                                                    <label>Thương hiệu</label>
-                                                    <input type="text" class="form-control" value="{{THUONGHIEU.TEN_THUONG_HIEU}}">
-                                                </div>
-                                                <div class="input-group input-group-static mb-4">
-                                                    <label>Số lượng</label>
-                                                    <input type="text" class="form-control" value="{{SO_LUONG}}">
-                                                </div>
-                                                <div class="input-group input-group-static mb-4">
-                                                    <label>Đơn giá</label>
-                                                    <input type="text" class="form-control" value="{{GIA}}">
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn bg-gradient-success">Lưu thay đổi</button>
-                                                <button type="button" class="btn bg-gradient-danger">Xóa sản phẩm</button>
-                                                <button type="button" class="btn btn-link  ml-auto" data-bs-dismiss="modal">Hủy</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                                 {{/each}}
                                 </tbody>
                             </table>
@@ -188,6 +146,90 @@
     </div>
 </main>
 {{> settings}}
+{{#each products}}
+    <div class="modal fade" id="editModal{{QUANAO_ID}}" tabindex="-1" role="dialog" aria-labelledby="editModal" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title font-weight-bold" id="modal-title-default">Chỉnh sửa sản phẩm</h5>
+                    <button type="button" style="background-color: black;" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group input-group-static mb-4">
+                        <label>Tên sản phẩm</label>
+                        <input type="text" class="form-control" value="{{LOAI.TEN_LOAI}}">
+                    </div>
+                    <div class="input-group input-group-static mb-4">
+                        <label>Màu sắc</label>
+                        <input type="text" class="form-control" value="{{MAU}}">
+                    </div>
+                    <div class="input-group input-group-static mb-4">
+                        <label>Giới tính phù hợp</label>
+                        <input type="text" class="form-control" value="{{GIOI_TINH}}">
+                    </div>
+                    <div class="input-group input-group-static mb-4">
+                        <label>Thương hiệu</label>
+                        <input type="text" class="form-control" value="{{THUONGHIEU.TEN_THUONG_HIEU}}">
+                    </div>
+                    <div class="input-group input-group-static mb-4">
+                        <label>Số lượng</label>
+                        <input type="text" class="form-control" value="{{SO_LUONG}}">
+                    </div>
+                    <div class="input-group input-group-static mb-4">
+                        <label>Đơn giá</label>
+                        <input type="text" class="form-control" value="{{GIA}}">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn bg-gradient-success">Lưu thay đổi</button>
+                    <button type="button" class="btn bg-gradient-danger">Xóa sản phẩm</button>
+                    <button type="button" class="btn btn-link  ml-auto" data-bs-dismiss="modal">Hủy</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{{/each}}
+<div class="modal fade" id="editModal{{QUANAO_ID}}" tabindex="-1" role="dialog" aria-labelledby="editModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title font-weight-bold" id="modal-title-default">Chỉnh sửa sản phẩm</h5>
+                <button type="button" style="background-color: black;" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="input-group input-group-static mb-4">
+                    <label>Tên sản phẩm</label>
+                    <input type="text" class="form-control" value="{{LOAI.TEN_LOAI}}">
+                </div>
+                <div class="input-group input-group-static mb-4">
+                    <label>Màu sắc</label>
+                    <input type="text" class="form-control" value="{{MAU}}">
+                </div>
+                <div class="input-group input-group-static mb-4">
+                    <label>Giới tính phù hợp</label>
+                    <input type="text" class="form-control" value="{{GIOI_TINH}}">
+                </div>
+                <div class="input-group input-group-static mb-4">
+                    <label>Thương hiệu</label>
+                    <input type="text" class="form-control" value="{{THUONGHIEU.TEN_THUONG_HIEU}}">
+                </div>
+                <div class="input-group input-group-static mb-4">
+                    <label>Số lượng</label>
+                    <input type="text" class="form-control" value="{{SO_LUONG}}">
+                </div>
+                <div class="input-group input-group-static mb-4">
+                    <label>Đơn giá</label>
+                    <input type="text" class="form-control" value="{{GIA}}">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn bg-gradient-success">Lưu thay đổi</button>
+                <button type="button" class="btn bg-gradient-danger">Xóa sản phẩm</button>
+                <button type="button" class="btn btn-link  ml-auto" data-bs-dismiss="modal">Hủy</button>
+            </div>
+        </div>
+    </div>
+</div>
 <!--   Core JS Files   -->
 <script src="/javascripts/core/popper.min.js"></script>
 <script src="/javascripts/core/bootstrap.min.js"></script>
