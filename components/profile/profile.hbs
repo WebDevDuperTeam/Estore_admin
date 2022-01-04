@@ -7,6 +7,23 @@
             <span class="mask  bg-gradient-primary  opacity-6"></span>
         </div>
         <div class="card card-body mx-3 mx-md-4 mt-n6">
+            {{#if changeProfileSuccess}}
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <span class="alert-icon align-middle"><span class="material-icons text-md">thumb_up_off_alt</span></span>
+                    <span class="alert-text"><strong>Thành công!</strong> Thông tin tài khoản của bạn đã được thay đổi!</span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {{else if changeProfileFail}}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <span class="alert-icon align-middle"><span class="material-icons text-md">error</span></span>
+                    <span class="alert-text"><strong>Lỗi!</strong> Không thể thay đổi thông tin tài khoản!</span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {{/if}}
             {{#if user}}
                 <div class="row gx-4 mb-2">
                 <div class="col-auto">
@@ -250,30 +267,35 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body font-weight-light">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="input-group input-group-static mb-4">
-                            <label>Họ</label>
-                            <input type="text" class="form-control" value="{{user.HO}}">
+            <form method="post">
+                <div class="modal-body font-weight-light">
+
+                        <input type="hidden" name="uid" value="{{user.USER_ID}}"/>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="input-group input-group-static mb-4">
+                                    <label>Họ</label>
+                                    <input type="text" class="form-control" name="newLastName" value="{{user.HO}}">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="input-group input-group-static mb-4">
+                                    <label>Tên</label>
+                                    <input type="text" class="form-control" name="newFirstName" value="{{user.TEN}}">
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-6">
                         <div class="input-group input-group-static mb-4">
-                            <label>Tên</label>
-                            <input type="text" class="form-control" value="{{user.TEN}}">
+                            <label>Số Banking</label>
+                            <input type="text" class="form-control" name="newBank" value="{{user.SO_BANKING}}">
                         </div>
-                    </div>
+
                 </div>
-                <div class="input-group input-group-static mb-4">
-                    <label>Số Banking</label>
-                    <input type="text" class="form-control" value="{{user.SO_BANKING}}">
+                <div class="modal-footer">
+                    <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn bg-gradient-primary">Save changes</button>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn bg-gradient-primary">Save changes</button>
-            </div>
+            </form>
         </div>
     </div>
 </div>
