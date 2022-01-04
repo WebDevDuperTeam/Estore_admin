@@ -129,3 +129,12 @@ exports.unlockUser = async (id) => {
         throw err;
     }
 }
+
+exports.changeUserProfile = async (id, ho, ten, banking) => {
+    try {
+        await users.update({HO: ho, TEN: ten, SO_BANKING: banking}, {where: {USER_ID: id}});
+    }
+    catch (err){
+        throw err;
+    }
+}
