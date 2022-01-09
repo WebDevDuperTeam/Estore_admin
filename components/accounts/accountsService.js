@@ -112,18 +112,9 @@ exports.changePassword = async (id, password) => {
     }
 }
 
-exports.lockUser = async (id) => {
+exports.updateUserLockStatus = async (id, lockStatus) => {
     try {
-        await users.update({KHOA: true}, {where: {USER_ID: id}});
-    }
-    catch (err){
-        throw err;
-    }
-}
-
-exports.unlockUser = async (id) => {
-    try {
-        await users.update({KHOA: false}, {where: {USER_ID: id}});
+        await users.update({KHOA: lockStatus}, {where: {USER_ID: id}});
     }
     catch (err){
         throw err;

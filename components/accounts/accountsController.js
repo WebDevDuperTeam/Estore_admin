@@ -56,7 +56,7 @@ exports.lockOrUnlockUser = async (req, res) => {
     else{
         if(req.body.lockButton){
             try{
-                await accountsService.unlockUser(userId);
+                await accountsService.updateUserLockStatus(userId, false);
             }
             catch (err){
                 req.session['cannotLock'] = true;
@@ -65,7 +65,7 @@ exports.lockOrUnlockUser = async (req, res) => {
         }
         else if(req.body.unlockButton){
             try{
-                await accountsService.lockUser(userId);
+                await accountsService.updateUserLockStatus(userId, true);
             }
             catch (err){
                 req.session['cannotUnlock'] = true;
