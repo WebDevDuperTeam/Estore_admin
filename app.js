@@ -124,6 +124,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(session({
   store: new redisStore({client: redisClient, ttl: 3600 * 24 * 30}),

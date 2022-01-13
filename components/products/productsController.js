@@ -1,4 +1,4 @@
-const tablesService = require('./productsService');
+const productsService = require('./productsService');
 const itemPerPage = 6;
 
 exports.showPage = async (req, res) => {
@@ -15,20 +15,87 @@ exports.showPage = async (req, res) => {
         let products;
         let maxNumberOfPages;
         if(name){
-            maxNumberOfPages = Math.ceil(await tablesService.countProductsOfName(name) / itemPerPage);
-            products = await tablesService.listProductsOfName(itemPerPage, page - 1, name);
+            maxNumberOfPages = Math.ceil(await productsService.countProductsOfName(name) / itemPerPage);
+            products = await productsService.listProductsOfName(itemPerPage, page - 1, name);
         }
         else{
-            maxNumberOfPages = Math.ceil(await tablesService.countTotalProducts() / itemPerPage);
-            products = await tablesService.listProducts(itemPerPage,page - 1);
+            maxNumberOfPages = Math.ceil(await productsService.countTotalProducts() / itemPerPage);
+            products = await productsService.listProducts(itemPerPage,page - 1);
         }
 
         //pass data to view and render
         const paginateInfo = {page, maxNumberOfPages, originalUrl, formLink: '/products?page='};
-        res.render('products', {title: "Products Table", products, tablesActive: req.app.locals.activeSideBarClass, paginateInfo});
+        const editProductError = req.session.editProductError;
+        res.render('products', {title: "Products Table", products,
+            tablesActive: req.app.locals.activeSideBarClass,
+            paginateInfo, editProductError});
+
+        //reset session parameters
+        req.session['editProductError'] = false;
     }
     catch (err) {
         res.render('error', {err});
     }
 
+}
+
+exports.postProduct = async (req, res) => {
+    const request = req.body.btn;
+
+    try {
+        switch (request) {
+            case 'lock':
+                //TODO: test locking a product
+                await lockProduct(req);
+                break;
+            case 'unlock':
+                //TODO: test unlocking a product
+                await unlockProduct(req);
+                break;
+            case 'save':
+                //TODO: test saving change to a product
+                await saveChangeToProduct(req);
+                break;
+            default:
+                //do nothing
+                break;
+        }
+    } catch (e) {
+        req.session['editProductError'] = true;
+    }
+    finally {
+        res.redirect('back');
+    }
+}
+
+async function lockProduct(req) {
+    const productId = req.body.productId;
+    try{
+        await productsService.updateLockStatusOfProduct(productId, true);
+    }
+    catch (error){throw error;}
+}
+
+async function unlockProduct(req) {
+    const productId = req.body.productId;
+    try{
+        await productsService.updateLockStatusOfProduct(productId, false);
+    }
+    catch (error){throw error;}
+}
+
+async function saveChangeToProduct(req) {
+    const productId = req.body.productId;
+    const productType = req.body.productType;
+    const color = req.body.color;
+    const gender = req.body.gender;
+    const brand = req.body.brand;
+    const number = req.body.number;
+    const price = req.body.price;
+
+    try {
+        await productsService.saveChangeToProduct(productId, productType, color, gender, brand, number, price);
+    } catch (err) {
+        throw err;
+    }
 }
