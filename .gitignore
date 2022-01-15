@@ -120,3 +120,6 @@ dist
 #idea
 **/.idea/workspace.xml
 **/.idea/tasks.xml
+
+#upload folder
+uploads/
