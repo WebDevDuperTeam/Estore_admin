@@ -6,9 +6,6 @@ const logger = require('morgan');
 const hbs = require("hbs");
 const session = require("express-session");
 const bodyParser = require("body-parser");
-const cloudinary = require('cloudinary').v2;
-
-const sizeOf = require('image-size');
 
 const billingRouter = require('./components/billing/billingRouter');
 const dashboardRouter = require('./components/dashboard/dashboardRouter');
@@ -129,13 +126,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-  secure: true
-});
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(session({
   store: new redisStore({client: redisClient, ttl: 3600 * 24 * 30}),
@@ -149,7 +139,6 @@ app.use(function (req, res, next) {
   res.locals.user = req.user;
   next();
 });
-
 
 // set up router
 app.use('/', authRouter);

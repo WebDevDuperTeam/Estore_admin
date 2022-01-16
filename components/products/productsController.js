@@ -46,16 +46,16 @@ exports.postProduct = async (req, res) => {
     try {
         switch (request) {
             case 'lock':
-                //TODO: test locking a product
                 await lockProduct(req);
                 break;
             case 'unlock':
-                //TODO: test unlocking a product
                 await unlockProduct(req);
                 break;
             case 'save':
-                //TODO: test saving change to a product
                 await saveChangeToProduct(req);
+                break;
+            case 'add':
+                await addNewProduct(req, res);
                 break;
             default:
                 //do nothing
@@ -91,13 +91,35 @@ async function saveChangeToProduct(req) {
     const color = req.body.color;
     const gender = req.body.gender;
     const brand = req.body.brand;
-    const number = req.body.number;
+    const quantity = req.body.quantity;
     const price = req.body.price;
 
     try {
-        await productsService.saveChangeToProduct(productId, productType, color, gender, brand, number, price);
+        await productsService.saveChangeToProduct(productId, productType, color, gender, brand, quantity, price);
     } catch (err) {
         throw err;
+    }
+}
+
+async function addNewProduct(req, res) {
+    const productType = req.body.productType;
+    const color = req.body.color;
+    const gender = req.body.gender;
+    const brand = req.body.brand;
+    const quantity = req.body.quantity;
+    const price = req.body.price;
+    const imagePath = res.locals.imagePath;
+
+    if(!imagePath){ //No image has been submitted to add new product
+        throw new Error('no image has been submitted');
+    }
+    else{
+        try{
+            await productsService.addNewProduct(imagePath, productType, color, gender, brand, quantity, price);
+        }
+        catch (err){
+            throw err;
+        }
     }
 }
 
@@ -117,5 +139,6 @@ exports.uploadImage = (req, res) => {
         });
     }
 
+    res.locals.imagePath = req.file.path;
     return res.status(200).send(req.file);
 }

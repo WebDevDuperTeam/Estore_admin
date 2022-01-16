@@ -3,6 +3,7 @@ const loai = models.loai;
 const kichthuoc = models.kichthuoc;
 const thuonghieu = models.thuonghieu;
 const quanao = models.quanao;
+const cloudinary = require('../../uploads/cloudinary');
 const { Op } = require("sequelize");
 
 exports.countTotalProducts = () =>{
@@ -84,22 +85,7 @@ exports.updateLockStatusOfProduct = async (id, lockStatus) => {
 
 exports.saveChangeToProduct = async (id, productType, color, gender, brand, number, price) => {
     //Check productType and brand validity. If not exists, add that new type or brand
-    const type = await findProductTypeOfName(productType);
-    const existedBrand = await findBrandOfName(brand);
-    let typeId, brandId;
-    if (!type) {  //Cannot found type of such name
-        const newType = await addNewType(productType);
-        typeId = newType.LOAI_ID;
-    } else {
-        typeId = type.LOAI_ID;
-    }
-    if(!existedBrand){  //Cannot found such brand in db
-        const newBrand = await addNewBrand(brand);
-        brandId = newBrand.THUONGHIEU_ID;
-    }
-    else{
-        brandId = existedBrand.THUONGHIEU_ID;
-    }
+    const {typeId, brandId} = checkTypeAndBrandValidity(productType, brand);
 
     //save change to product
     try {
@@ -112,6 +98,57 @@ exports.saveChangeToProduct = async (id, productType, color, gender, brand, numb
             GIOI_TINH: gender
         }, {where: {QUANAO_ID: id}})
     } catch (e) {throw e;}
+}
+
+exports.addNewProduct = async (imagePath, productType, color, gender, brand, quantity, price) => {
+    //TODO:check undefined parameters
+
+    //upload image to cloudinary and save image path (from cloud)
+    let cloudImagePath = null;
+    await cloudinary.uploader.upload(imagePath, {resource_type: "image"}, function (err, result) {
+        if(err){
+            throw err;
+        }
+        cloudImagePath = result.secure_url;
+    });
+
+    //Check productType and brand validity. If not exists, add that new type or brand
+    const {typeId, brandId} = await checkTypeAndBrandValidity(productType, brand);
+
+    //create new product in db
+    await quanao.create({
+        LOAI_ID: typeId,
+        MAU: color,
+        THUONGHIEU_ID: brandId,
+        GIA: price,
+        SO_LUONG: quantity,
+        GIOI_TINH: gender,
+        LINK: cloudImagePath
+    })
+}
+
+//Check productType and brand validity. If not exists, add that new type or brand.
+//Return approriate typeId and brandId
+async function checkTypeAndBrandValidity(productType, brand){
+    const existedType = await findProductTypeOfName(productType);
+    const existedBrand = await findBrandOfName(brand);
+    let typeId, brandId;
+
+    if (!existedType) {  //Cannot found type of such name
+        const newType = await addNewType(productType);
+        typeId = newType.LOAI_ID;
+    } else {
+        typeId = existedType.LOAI_ID;
+    }
+    if(!existedBrand){  //Cannot found such brand in db
+        const newBrand = await addNewBrand(brand);
+        brandId = newBrand.THUONGHIEU_ID;
+    }
+    else{
+        brandId = existedBrand.THUONGHIEU_ID;
+    }
+
+    return {typeId, brandId};
 }
 
 async function addNewBrand(name) {

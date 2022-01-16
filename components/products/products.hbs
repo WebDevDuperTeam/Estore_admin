@@ -136,33 +136,33 @@
                         <div class="card-body">
                             <form id="addProduct" method="post">
                                 <div class="input-group input-group-lg input-group-outline my-3">
-                                    <label class="form-label">Tên sản phẩm</label>
-                                    <input type="text" class="form-control form-control-lg"
+                                    <label class="form-label">Loại sản phẩm</label>
+                                    <input type="text" class="form-control form-control-lg" name="productType"
                                            onfocus="focused(this)" onfocusout="defocused(this)">
                                 </div>
                                 <div class="input-group input-group-lg input-group-outline my-3">
                                     <label class="form-label">Màu sắc</label>
-                                    <input type="text" class="form-control form-control-lg"
+                                    <input type="text" class="form-control form-control-lg" name="color"
                                            onfocus="focused(this)" onfocusout="defocused(this)">
                                 </div>
                                 <div class="input-group input-group-lg input-group-outline my-3">
-                                    <label class="form-label">Nhà sản xuất</label>
-                                    <input type="text" class="form-control form-control-lg"
+                                    <label class="form-label">Thương hiệu</label>
+                                    <input type="text" class="form-control form-control-lg" name="brand"
                                            onfocus="focused(this)" onfocusout="defocused(this)">
                                 </div>
                                 <div class="input-group input-group-lg input-group-outline my-3">
                                     <label class="form-label">Giới tính phù hợp</label>
-                                    <input type="text" class="form-control form-control-lg"
+                                    <input type="text" class="form-control form-control-lg" name="gender"
                                            onfocus="focused(this)" onfocusout="defocused(this)">
                                 </div>
                                 <div class="input-group input-group-lg input-group-outline my-3">
                                     <label class="form-label">Số lượng</label>
-                                    <input type="number" class="form-control form-control-lg"
+                                    <input type="number" class="form-control form-control-lg" name="quantity"
                                            onfocus="focused(this)" onfocusout="defocused(this)">
                                 </div>
                                 <div class="input-group input-group-lg input-group-outline my-3">
                                     <label class="form-label">Đơn giá</label>
-                                    <input type="text" class="form-control form-control-lg"
+                                    <input type="text" class="form-control form-control-lg" name="price"
                                            onfocus="focused(this)" onfocusout="defocused(this)">
                                 </div>
                                 <label class="form-label">Hình ảnh</label>
@@ -172,8 +172,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" form="addProduct" class="btn bg-gradient-primary">Thêm sản phẩm</button>
-                    <button type="button" class="btn btn-link  ml-auto" data-bs-dismiss="modal">Hủy</button>
+                    <button type="submit" name="btn" value="add" form="addProduct" class="btn bg-gradient-primary">Thêm sản phẩm</button>
+                    <button type="button" class="btn btn-link  ml-auto" data-bs-dismiss="modal" onclick="cleanAddProductModal()">Hủy</button>
                 </div>
         </div>
     </div>
@@ -208,7 +208,7 @@
                             </div>
                             <div class="input-group input-group-static mb-4">
                                 <label>Số lượng</label>
-                                <input type="text" name="number" class="form-control" value="{{SO_LUONG}}">
+                                <input type="text" name="quantity" class="form-control" value="{{SO_LUONG}}">
                             </div>
                             <div class="input-group input-group-static mb-4">
                                 <label>Đơn giá</label>
@@ -280,4 +280,12 @@
             };
         }
     };
+</script>
+<script type="text/javascript">
+    function cleanAddProductModal(){
+        Dropzone.forElement('#upload-widget').removeAllFiles(true);
+        if(imagePath){
+            imagePath = undefined;
+        }
+    }
 </script>
