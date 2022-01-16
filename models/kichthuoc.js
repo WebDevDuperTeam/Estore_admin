@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('kichthuoc', {
     QUANAO_ID: {
-      type: DataTypes.CHAR(10),
+      type: DataTypes.CHAR(36),
       allowNull: false,
       primaryKey: true,
       references: {

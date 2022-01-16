@@ -1,11 +1,12 @@
 const Sequelize = require('sequelize');
+const {UUIDV4} = require("sequelize");
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('users', {
     USER_ID: {
-      type: DataTypes.CHAR(255),
+      type: DataTypes.CHAR(36),
       allowNull: false,
       primaryKey: true,
-      defaultValue: DataTypes.UUIDV4
+      defaultValue: UUIDV4
     },
     TEN: {
       type: DataTypes.STRING(10),
@@ -51,7 +52,7 @@ module.exports = function(sequelize, DataTypes) {
     NGAY_HET_HAN_TOKEN: {
       type: DataTypes.DATE,
       allowNull: true,
-      defaultValue: Sequelize.NOW
+      defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP')
     }
   }, {
     sequelize,

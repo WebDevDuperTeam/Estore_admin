@@ -1,17 +1,19 @@
 const Sequelize = require('sequelize');
+const {UUIDV4} = require("sequelize");
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('giohang', {
     GIOHANG_ID: {
-      type: DataTypes.CHAR(10),
+      type: DataTypes.CHAR(36),
       allowNull: false,
-      primaryKey: true
+      primaryKey: true,
+      defaultValue: UUIDV4
     },
     USER_NAME: {
       type: DataTypes.STRING(50),
       allowNull: true
     },
     USER_ID: {
-      type: DataTypes.CHAR(10),
+      type: DataTypes.CHAR(36),
       allowNull: true,
       references: {
         model: 'users',
