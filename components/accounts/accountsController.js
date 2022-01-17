@@ -29,15 +29,15 @@ exports.showPage = async (req, res) => {
         const cannotLock = req.session.cannotLock;
         const cannotUnlock = req.session.cannotUnlock;
 
-        res.render('accounts', {title: "Accounts Table", users,
-            accountsActive: req.app.locals.activeSideBarClass,
-            paginateInfo,
-            cannotLockYourOwnAccount, cannotLock, cannotUnlock});
-
         //reset session parameters
         req.session['cannotLockYourOwnAccount'] = false;
         req.session['cannotLock'] = false;
         req.session['cannotUnlock'] = false;
+
+        res.render('accounts', {title: "Accounts Table", users,
+            accountsActive: req.app.locals.activeSideBarClass,
+            paginateInfo,
+            cannotLockYourOwnAccount, cannotLock, cannotUnlock});
     }
     catch (err) {
         res.render('error', {err});
