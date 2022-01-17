@@ -17,7 +17,6 @@ const passport = require("./auth/passport");
 const app = express();
 const redisStore = require('connect-redis')(session);
 const redisClient = require('./session-store/redisClient');
-const { Dropzone } = require("dropzone");
 
 //register hbs helper
 hbs.registerHelper('isEquals', function(value1, value2) {return value1 === value2;});
@@ -139,7 +138,12 @@ app.use(function (req, res, next) {
   res.locals.user = req.user;
   next();
 });
-
+app.use(function (req, res, next) {
+  if(req.session.imagePath){
+    res.locals.imagePath = req.session.imagePath;
+  }
+  next();
+});
 // set up router
 app.use('/', authRouter);
 app.use('/', checkSignedIn, dashboardRouter);

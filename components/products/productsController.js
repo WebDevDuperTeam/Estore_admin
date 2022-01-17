@@ -113,9 +113,13 @@ async function addNewProduct(req, res) {
     if(!imagePath){ //No image has been submitted to add new product
         throw new Error('no image has been submitted');
     }
+    else if(!productType || !color || !gender || !brand || !quantity || !price){
+        throw new Error('need to fill all info');
+    }
     else{
         try{
             await productsService.addNewProduct(imagePath, productType, color, gender, brand, quantity, price);
+            req.session.imagePath = undefined;
         }
         catch (err){
             throw err;
@@ -139,6 +143,6 @@ exports.uploadImage = (req, res) => {
         });
     }
 
-    res.locals.imagePath = req.file.path;
+    req.session['imagePath'] = req.file.path;
     return res.status(200).send(req.file);
 }
