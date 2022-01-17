@@ -85,7 +85,7 @@ exports.updateLockStatusOfProduct = async (id, lockStatus) => {
 
 exports.saveChangeToProduct = async (id, productType, color, gender, brand, number, price) => {
     //Check productType and brand validity. If not exists, add that new type or brand
-    const {typeId, brandId} = checkTypeAndBrandValidity(productType, brand);
+    const {typeId, brandId} = await checkTypeAndBrandValidity(productType, brand);
 
     //save change to product
     try {

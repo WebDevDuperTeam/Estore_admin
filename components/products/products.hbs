@@ -70,7 +70,7 @@
                                     </td>
                                     <td class="align-middle text-center text-sm">
                                         {{#unless SO_LUONG}}
-                                            <span class="badge badge-sm bg-gradient-success">Hết hàng</span>
+                                            <span class="badge badge-sm bg-gradient-danger">Hết hàng</span>
                                         {{else}}
                                             <span class="badge badge-sm bg-gradient-success">Còn hàng</span>
                                         {{/unless}}
@@ -208,11 +208,11 @@
                             </div>
                             <div class="input-group input-group-static mb-4">
                                 <label>Số lượng</label>
-                                <input type="text" name="quantity" class="form-control" value="{{SO_LUONG}}">
+                                <input type="number" min="0" name="quantity" class="form-control" value="{{SO_LUONG}}">
                             </div>
                             <div class="input-group input-group-static mb-4">
                                 <label>Đơn giá</label>
-                                <input type="text" name="price" class="form-control" value="{{GIA}}">
+                                <input type="number" min="0" step="1000" name="price" class="form-control" value="{{GIA}}">
                             </div>
                     </div>
                     <div class="modal-footer">
