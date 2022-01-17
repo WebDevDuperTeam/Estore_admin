@@ -33,16 +33,18 @@ exports.signUpNewUser = async (req, res) => {
     }
     else{   //All info has been filled and password valid
         try{
-            const deliverable = mailService.checkEmailDeliverability(email);
-
-            if (!deliverable) { //cannot send mail there
-                res.render('signup', {emailInvalid: true, layout: 'signLayout'});
-            }
-            else { //activation mail can be sent
-                const {user, token} = await authService.registerUser(firstName, lastName, email, password);
-                await mailService.sendActivationMail(user.EMAIL, user.TEN, token, user.USER_ID);
-                res.render('activationMailSent', {email: user.EMAIL, layout: 'blankLayout'});
-            }
+            let deliverable = false;
+            mailService.checkEmailDeliverability(email, async function(result){
+                deliverable = result;
+                if (!deliverable) { //cannot send mail there
+                    res.render('signup', {emailInvalid: true, layout: 'signLayout'});
+                }
+                else { //activation mail can be sent
+                    const {user, token} = await authService.registerUser(firstName, lastName, email, password);
+                    await mailService.sendActivationMail(user.EMAIL, user.TEN, token, user.USER_ID);
+                    res.render('activationMailSent', {email: user.EMAIL, layout: 'blankLayout'});
+                }
+            });
         }
         catch (err) {
             if(err.name === 'Email has been registered'){

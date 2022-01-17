@@ -3,13 +3,11 @@ const kickbox = require('kickbox').client(process.env.KICKBOX_API_KEY).kickbox()
 const hbsNodeMailer = require('nodemailer-express-handlebars');
 const website_url = `https://managefahsion.herokuapp.com`;
 
-exports.checkEmailDeliverability = (email) => {
-    let result = 'undeliverable';
+exports.checkEmailDeliverability = (email, callback) => {
     kickbox.verify(email, function (err, response) {
-        result = response.body.result;
+        let result = (response.body.result !== 'undeliverable');
+        callback(result);
     });
-
-    return result === 'deliverable';
 };
 
 exports.sendActivationMail = async (email, name, token, id) => {
