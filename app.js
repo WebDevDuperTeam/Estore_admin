@@ -144,6 +144,7 @@ app.use(function (req, res, next) {
   }
   next();
 });
+
 // set up router
 app.use('/', authRouter);
 app.use('/', checkSignedIn, dashboardRouter);
